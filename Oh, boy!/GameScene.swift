@@ -9,7 +9,7 @@
 import SpriteKit
 import GameplayKit
 
-class GameScene: SKScene {
+class GameScene: SKScene, SKPhysicsContactDelegate {
     
     // Texture
     var bgSkyTexture: SKTexture!
@@ -32,8 +32,8 @@ class GameScene: SKScene {
     var mountainBgObject = SKNode()
     var groundBgObject = SKNode()
     var groundObject = SKNode()
+    var skyObject = SKNode()
     var heroObject = SKNode()
-    var movingObject = SKNode()
     
     // Bit masks
     var heroGroup: UInt32 = 0x1 << 1
@@ -53,14 +53,19 @@ class GameScene: SKScene {
         flyHeroTex = SKTexture(imageNamed: "jump_fall.png")
         runHeroTex = SKTexture(imageNamed: "run_1.png")
         
+        self.physicsWorld.contactDelegate = self
+        
         createObjects()
         createGame()
     }
     
     func createObjects() {
+        // Background objects
         self.addChild(skyBgObject)
         self.addChild(mountainBgObject)
         self.addChild(groundBgObject)
+        
+        self.addChild(skyObject)
         self.addChild(groundObject)
         self.addChild(heroObject)
     }
@@ -128,10 +133,10 @@ class GameScene: SKScene {
     func createSky() {
         sky = SKSpriteNode()
         sky.position = CGPoint(x: 0, y: self.frame.maxX)
-        sky.physicsBody = SKPhysicsBody(rectangleOf: CGSize(width: self.frame.size.width + 100, height: self.frame.size.height - 50))
+        sky.physicsBody = SKPhysicsBody(rectangleOf: CGSize(width: self.frame.size.width + 100, height: self.frame.size.height))
         sky.physicsBody?.isDynamic = false
         sky.zPosition = 1
-        movingObject.addChild(sky)
+        skyObject.addChild(sky)
     }
     
     func addHero(heroNode: SKSpriteNode, atPosition position: CGPoint) {
@@ -139,7 +144,7 @@ class GameScene: SKScene {
         
         // Anim hero
         
-        heroflyTexturesArray = [SKTexture(imageNamed: "jump_fall.png"), SKTexture(imageNamed: "jump_fall1.png")]
+        heroflyTexturesArray = [SKTexture(imageNamed: "jump_fall.png")]
         let heroFlyAnimation = SKAction.animate(with: heroflyTexturesArray, timePerFrame: 0.1)
         let flyHero = SKAction.repeatForever(heroFlyAnimation)
         hero.run(flyHero)
@@ -162,6 +167,6 @@ class GameScene: SKScene {
     }
     
     func createHero() {
-        addHero(heroNode: hero, atPosition: CGPoint(x: self.size.width / 4, y: 0 + flyHeroTex.size().height + 400))
+        addHero(heroNode: hero, atPosition: CGPoint(x: self.size.width / 4, y: 0 + flyHeroTex.size().height))
     }
 }
