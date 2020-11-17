@@ -14,6 +14,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     // Variables
     var sound = true
     var death = false
+    var moveSkullY = SKAction()
+    var gameViewControllerBridge: GameViewController!
     
     // Texture
     var bgSkyTexture: SKTexture!
@@ -27,6 +29,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     var bigCoinAnimateTexture: SKTexture!
     var wormTexture: SKTexture!
     var deadHeroTexture: SKTexture!
+    var skullTexture: SKTexture!
     
     
     // Sprite Nodes
@@ -39,6 +42,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     var coin = SKSpriteNode()
     var bigCoin = SKSpriteNode()
     var worm = SKSpriteNode()
+    var skull = SKSpriteNode()
     
     // Sprites Objects
     var skyBgObject = SKNode()
@@ -69,11 +73,13 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     var timerAddCoin = Timer()
     var timerAddBigCoin = Timer()
     var timerAddWorm = Timer()
+    var timerAddSkull = Timer()
     
     // Sounds
     var pickCoinPreload = SKAction()
     var wormPreload = SKAction()
     var deadPreload = SKAction()
+    var skullPreload = SKAction()
     
     override func didMove(to view: SKView) {
         // Background texture
@@ -96,13 +102,17 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                              SKTexture(imageNamed: "Coin3.png")]
         
         // Worm texture
-        wormTexture = SKTexture(imageNamed: "worm_1")
+        wormTexture = SKTexture(imageNamed: "worm_1.png")
+        skullTexture = SKTexture(imageNamed: "skull.png")
         
         self.physicsWorld.contactDelegate = self
         
         createObjects()
         
         pickCoinPreload = SKAction.playSoundFileNamed("pickCoin.mp3", waitForCompletion: false)
+        wormPreload = SKAction.playSoundFileNamed("worm.mp3", waitForCompletion: false)
+        deadPreload = SKAction.playSoundFileNamed("", waitForCompletion: false)
+        skullPreload = SKAction.playSoundFileNamed("", waitForCompletion: false)
         
         createGame()
     }
@@ -130,7 +140,10 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             self.createHero()
             self.addTimer()
             self.addWorm()
+            self.addSkull()
         }
+        
+        gameViewControllerBridge.reloadButton.isHidden = true
     }
     
     func createBg() {
@@ -280,9 +293,9 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     }
     
     @objc func addWorm() {
-//       if sound {
-//            run(spiderCreatePreload)
-//        }
+       if sound {
+            run(wormPreload)
+        }
                     
         worm = SKSpriteNode(texture: wormTexture)
         wormTexturesArray = [
@@ -330,18 +343,96 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         movingObject.addChild(worm)
     }
     
+    @objc func addSkull() {
+        if sound {
+            run(skullPreload)
+        }
+                         
+        skull = SKSpriteNode(texture: skullTexture)
+               
+        let movementRandom = arc4random() % 9
+        let movementAmount = arc4random() % UInt32(self.frame.size.height / 2)
+        let pipeOffset = CGFloat(movementAmount) - self.frame.size.height / 4
+        if movementRandom == 0 {
+            moveSkullY = SKAction.moveTo(y: self.frame.height / 2 + 180, duration: 8)
+        } else if movementRandom == 1 {
+            moveSkullY = SKAction.moveTo(y: self.frame.height / 2 - 180, duration: 5)
+        } else if movementRandom == 2 {
+            moveSkullY = SKAction.moveTo(y: self.frame.height / 2 - 200, duration: 8)
+        } else if movementRandom == 3 {
+            moveSkullY = SKAction.moveTo(y: self.frame.height / 2 + 200, duration: 5)
+        } else if movementRandom == 4 {
+            moveSkullY = SKAction.moveTo(y: self.frame.height / 2 + 40, duration: 4)
+        } else if movementRandom == 5 {
+            moveSkullY = SKAction.moveTo(y: self.frame.height / 2 - 35, duration: 5)
+        } else {
+            moveSkullY = SKAction.moveTo(y: self.frame.height / 2, duration: 4)
+        }
+                     
+        skull.run(moveSkullY)
+                
+        skull.size.width = 100
+        skull.size.height = 70
+        skull.speed  = 2.3
+                         
+        skull.position = CGPoint(x: self.frame.size.width + 150, y: self.frame.size.height / 4 - self.frame.size.height / 24 + pipeOffset)
+                         
+        let moveSkullX = SKAction.moveTo(x: -self.frame.size.width / 2, duration: 8)
+        skull.physicsBody = SKPhysicsBody(rectangleOf: CGSize(width: skull.size.width - 43, height: skull.size.height - 27))
+        skull.physicsBody?.categoryBitMask = objectGroup
+        skull.physicsBody?.isDynamic = false
+                         
+        let removeAction = SKAction.removeFromParent()
+        let skullMoveBgForever = SKAction.repeatForever(SKAction.sequence([moveSkullX, removeAction]))
+                         
+        skull.run(skullMoveBgForever)
+        skull.zPosition = 1
+        movingObject.addChild(skull)
+    }
+    
     func deathAction() {
         mountainBgObject.isPaused = true
         groundBgObject.isPaused = true
         hero.texture = SKTexture(imageNamed: "fail3.png")
         hero.speed = 0
-        hero.isPaused = true
+        worm.removeAllChildren()
         hero.removeAllChildren()
+    }
+    
+    func reloadGame() {
+        death = false
+        coinObject.removeAllChildren()
+        bigCoinObject.removeAllChildren()
+        
+        scene?.isPaused = false
+           
+        movingObject.removeAllChildren()
+        heroObject.removeAllChildren()
+           
+        coinObject.speed = 1
+        heroObject.speed = 1
+        movingObject.speed = 1
+        groundBgObject.isPaused = false
+        mountainBgObject.isPaused = false
+        self.scene?.speed = 1
+           
+        createGround()
+        createSky()
+        createHero()
+           
+        timerAddCoin.invalidate()
+        timerAddBigCoin.invalidate()
+        timerAddSkull.invalidate()
+        timerAddWorm.invalidate()
+       
+        addTimer()
     }
     
     func addTimer() {
         timerAddCoin.invalidate()
         timerAddBigCoin.invalidate()
+        timerAddWorm.invalidate()
+        timerAddSkull.invalidate()
            
         timerAddCoin = Timer.scheduledTimer(timeInterval: 2.83,
                                             target: self,
@@ -358,5 +449,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                                             selector: #selector(GameScene.addWorm),
                                             userInfo: nil,
                                             repeats: true)
+        timerAddSkull = Timer.scheduledTimer(timeInterval: 6, target: self, selector: #selector(GameScene.addSkull), userInfo: nil, repeats: true)
     }
 }
