@@ -16,12 +16,14 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     var death = false
     var moveSkullY = SKAction()
     var gameViewControllerBridge: GameViewController!
+    var animation = Animation()
+    var shieldBool = false
     
     // Texture
     var bgSkyTexture: SKTexture!
     var bgMountainTexture: SKTexture!
     var bgGroundTexture: SKTexture!
-    var flyHeroTex: SKTexture!
+    var jumpHeroTex: SKTexture!
     var runHeroTex: SKTexture!
     var coinTexture: SKTexture!
     var bigCoinTexture: SKTexture!
@@ -30,7 +32,11 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     var wormTexture: SKTexture!
     var deadHeroTexture: SKTexture!
     var skullTexture: SKTexture!
+    var shieldTexture: SKTexture!
+    var shieldItemTexture: SKTexture!
     
+    // Emitters node
+    var shieldEmitter = SKEmitterNode()
     
     // Sprite Nodes
     var bgSky = SKSpriteNode()
@@ -43,6 +49,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     var bigCoin = SKSpriteNode()
     var worm = SKSpriteNode()
     var skull = SKSpriteNode()
+//    var shield = SKSpriteNode()
+    var shieldItem = SKSpriteNode()
     
     // Sprites Objects
     var skyBgObject = SKNode()
@@ -54,6 +62,9 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     var coinObject = SKNode()
     var bigCoinObject = SKNode()
     var movingObject = SKNode()
+    var shieldObject = SKNode()
+    var shieldItemObject = SKNode()
+    var shieldEmitterObject = SKNode()
     
     // Bit masks
     var heroGroup: UInt32 = 0x1 << 1
@@ -61,6 +72,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     var coinGroup: UInt32 = 0x1 << 3
     var bigCoinGroup: UInt32 = 0x1 << 4
     var objectGroup: UInt32 = 0x1 << 5
+    var shieldGroup: UInt32 = 0x1 << 6
     
     // Textures array for animateWithTexture
     var heroflyTexturesArray = [SKTexture]()
@@ -74,12 +86,15 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     var timerAddBigCoin = Timer()
     var timerAddWorm = Timer()
     var timerAddSkull = Timer()
+    var timerAddShieldItem = Timer()
     
     // Sounds
-    var pickCoinPreload = SKAction()
+//    var pickCoinPreload = SKAction()
     var wormPreload = SKAction()
     var deadPreload = SKAction()
     var skullPreload = SKAction()
+    var shieldOnPreload = SKAction()
+    var shieldOffPreload = SKAction()
     
     override func didMove(to view: SKView) {
         // Background texture
@@ -88,7 +103,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         bgGroundTexture = SKTexture(imageNamed: "ground.png")
         
         // Hero texture
-        flyHeroTex = SKTexture(imageNamed: "jump_fall.png")
+        jumpHeroTex = SKTexture(imageNamed: "jump_up.png")
         runHeroTex = SKTexture(imageNamed: "run_1.png")
         
         // Coin texture
@@ -105,14 +120,22 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         wormTexture = SKTexture(imageNamed: "worm_1.png")
         skullTexture = SKTexture(imageNamed: "skull.png")
         
+        // Shield texture
+        shieldTexture = SKTexture(imageNamed: "engine.sks")
+        shieldItemTexture = SKTexture(imageNamed: "shieldBottle.png")
+        
+        // Emitters
+        shieldEmitter = SKEmitterNode(fileNamed: "engine.sks")!
+        
         self.physicsWorld.contactDelegate = self
         
         createObjects()
         
-        pickCoinPreload = SKAction.playSoundFileNamed("pickCoin.mp3", waitForCompletion: false)
+//        pickCoinPreload = SKAction.playSoundFileNamed("pickCoin.mp3", waitForCompletion: false)
         wormPreload = SKAction.playSoundFileNamed("worm.mp3", waitForCompletion: false)
         deadPreload = SKAction.playSoundFileNamed("", waitForCompletion: false)
         skullPreload = SKAction.playSoundFileNamed("", waitForCompletion: false)
+        shieldOnPreload = SKAction.playSoundFileNamed("", waitForCompletion: false)
         
         createGame()
     }
@@ -129,6 +152,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         self.addChild(coinObject)
         self.addChild(bigCoinObject)
         self.addChild(movingObject)
+        self.addChild(shieldObject)
+        self.addChild(shieldItemObject)
     }
     
     func createGame() {
@@ -209,11 +234,11 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     }
     
     func addHero(heroNode: SKSpriteNode, atPosition position: CGPoint) {
-        hero = SKSpriteNode(texture: flyHeroTex)
+        hero = SKSpriteNode(texture: jumpHeroTex)
         
         // Anim hero
         
-        heroflyTexturesArray = [SKTexture(imageNamed: "jump_fall.png")]
+        heroflyTexturesArray = [SKTexture(imageNamed: "jump_up.png")]
         let heroFlyAnimation = SKAction.animate(with: heroflyTexturesArray, timePerFrame: 0.1)
         let flyHero = SKAction.repeatForever(heroFlyAnimation)
         hero.run(flyHero)
@@ -225,7 +250,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         hero.physicsBody = SKPhysicsBody(rectangleOf: CGSize(width: hero.size.width - 40, height: hero.size.height - 30))
         
         hero.physicsBody?.categoryBitMask = heroGroup
-        hero.physicsBody?.contactTestBitMask = groundGroup | coinGroup | bigCoinGroup | objectGroup
+        hero.physicsBody?.contactTestBitMask = groundGroup | coinGroup | bigCoinGroup | objectGroup | shieldGroup 
         hero.physicsBody?.collisionBitMask = groundGroup
         
         hero.physicsBody?.isDynamic = true
@@ -236,11 +261,11 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     }
     
     func createHero() {
-        addHero(heroNode: hero, atPosition: CGPoint(x: self.size.width / 4, y: 0 + flyHeroTex.size().height))
+        addHero(heroNode: hero, atPosition: CGPoint(x: self.size.width / 4, y: 0 + jumpHeroTex.size().height))
     }
     
     @objc func addCoin() {
-        coin = SKSpriteNode(texture: coinTexture)
+        coin = SKSpriteNode(texture: shieldTexture)
                
        
         let coinAnimation = SKAction.animate(with: coinTexturesArray, timePerFrame: 0.1)
@@ -390,6 +415,43 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         movingObject.addChild(skull)
     }
     
+    func addShield() {
+        if sound == true { run(shieldOnPreload) }
+        createShieldEmitter()
+    }
+    
+    @objc func addShieldItem() {
+        shieldItem = SKSpriteNode(texture: shieldItemTexture)
+        
+        let movementAmount = arc4random() % UInt32(self.frame.size.height / 2)
+        let pipeOffset = CGFloat(movementAmount) - self.frame.size.height / 4
+        
+        shieldItem.size.width = 50
+        shieldItem.size.height = 65
+        
+        shieldItem.position = CGPoint(x: self.size.width + 50, y: 0 + shieldItemTexture.size().height + self.size.height / 45 + pipeOffset)
+        shieldItem.physicsBody = SKPhysicsBody(rectangleOf: CGSize(width: shieldItem.size.width - 20, height: shieldItem.size.height - 20))
+        shieldItem.physicsBody?.restitution = 0
+        
+        let moveShield = SKAction.moveBy(x: -self.size.width * 2, y: 0, duration: 5)
+        let removeAction = SKAction.removeFromParent()
+        let shieldItemMoveBgForever = SKAction.repeatForever(SKAction.sequence([moveShield, removeAction]))
+        shieldItem.run(shieldItemMoveBgForever)
+        
+        shieldItem.setScale(0.9)
+        
+        shieldItem.physicsBody?.isDynamic = false
+        shieldItem.physicsBody?.categoryBitMask = shieldGroup
+        shieldItem.zPosition = 1
+        shieldItemObject.addChild(shieldItem)
+    }
+    
+    func createShieldEmitter() {
+        shieldEmitter = SKEmitterNode(fileNamed: "engine.sks")!
+        shieldObject.zPosition = 1
+        shieldObject.addChild(shieldEmitter)
+       }
+    
     func deathAction() {
         mountainBgObject.isPaused = true
         groundBgObject.isPaused = true
@@ -424,6 +486,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         timerAddBigCoin.invalidate()
         timerAddSkull.invalidate()
         timerAddWorm.invalidate()
+        timerAddShieldItem.invalidate()
        
         addTimer()
     }
@@ -433,6 +496,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         timerAddBigCoin.invalidate()
         timerAddWorm.invalidate()
         timerAddSkull.invalidate()
+        timerAddShieldItem.invalidate()
            
         timerAddCoin = Timer.scheduledTimer(timeInterval: 2.83,
                                             target: self,
@@ -449,6 +513,18 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                                             selector: #selector(GameScene.addWorm),
                                             userInfo: nil,
                                             repeats: true)
-        timerAddSkull = Timer.scheduledTimer(timeInterval: 6, target: self, selector: #selector(GameScene.addSkull), userInfo: nil, repeats: true)
+        timerAddSkull = Timer.scheduledTimer(timeInterval: 8.54,
+                                             target: self,
+                                             selector: #selector(GameScene.addSkull),
+                                             userInfo: nil, repeats: true)
+        timerAddShieldItem = Timer.scheduledTimer(timeInterval: 3.45,
+                                                  target: self,
+                                                  selector: #selector(GameScene.addShieldItem),
+                                                  userInfo: nil,
+                                                  repeats: true)
+    }
+    
+    override func didFinishUpdate() {
+        shieldEmitter.position = hero.position + CGPoint(x: 0, y: 0)
     }
 }

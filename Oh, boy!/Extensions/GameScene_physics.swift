@@ -10,6 +10,7 @@ import Foundation
 import SpriteKit
 
 extension GameScene {
+    
   func didBegin(_ contact: SKPhysicsContact) {
          
          let objectNode = contact.bodyA.categoryBitMask == objectGroup ? contact.bodyA.node : contact.bodyB.node
@@ -18,38 +19,59 @@ extension GameScene {
             death = true
             hero.physicsBody?.velocity = CGVector(dx: 0, dy: 0)
             
-                             
-            if sound {
-            run(deadPreload)
-            }
-                             
-            hero.physicsBody?.allowsRotation = false
-                             
-            timerAddCoin.invalidate()
-            timerAddBigCoin.invalidate()
-            timerAddWorm.invalidate()
-            timerAddSkull.invalidate()
-                             
-            heroDeathTexturesArray = [
-                             SKTexture(imageNamed: "fail.png"),
-                             SKTexture(imageNamed: "fail2.png"),
-                             SKTexture(imageNamed: "fail3.png")
-                 ]
-            hero.size.height = 85
-            hero.size.width = 130
-            hero.position = CGPoint(x: self.size.width - 100, y: 0)
-            let heroDeathAnimation = SKAction.animate(with: heroDeathTexturesArray,
-                                                     timePerFrame: 0.1)
-            hero.run(heroDeathAnimation)
-                 
-            if death {
-                deathAction()
-                                           
-                DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-                    self.gameViewControllerBridge.reloadButton.isHidden = false
+            if !shieldBool {
+                animation.shakeAndFlashAnimation(view: self.view!)
+                
+                if sound {
+                run(deadPreload)
+                }
+                                 
+                hero.physicsBody?.allowsRotation = false
+                                 
+                timerAddCoin.invalidate()
+                timerAddBigCoin.invalidate()
+                timerAddWorm.invalidate()
+                timerAddSkull.invalidate()
+                                 
+                heroDeathTexturesArray = [
+                                 SKTexture(imageNamed: "fail.png"),
+                                 SKTexture(imageNamed: "fail2.png"),
+                                 SKTexture(imageNamed: "fail3.png")
+                     ]
+                hero.size.height = 85
+                hero.size.width = 130
+                hero.position = CGPoint(x: self.size.width - 100, y: 0)
+                let heroDeathAnimation = SKAction.animate(with: heroDeathTexturesArray,
+                                                         timePerFrame: 0.1)
+                hero.run(heroDeathAnimation)
+                     
+                if death {
+                    deathAction()
+                                               
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                        self.gameViewControllerBridge.reloadButton.isHidden = false
+                    }
+                }
+            } else {
+                death = false
+                objectNode?.removeFromParent()
+                shieldObject.removeAllChildren()
+                shieldBool = false
+                if sound {
+                    run(shieldOffPreload)
                 }
             }
          }
+    
+        if contact.bodyA.categoryBitMask == shieldGroup || contact.bodyB.categoryBitMask == shieldGroup {
+            let shieldNode = contact.bodyA.categoryBitMask == shieldGroup ? contact.bodyA.node : contact.bodyB.node
+            if !shieldBool {
+                if sound { run(shieldOnPreload) }
+                shieldNode?.removeFromParent()
+                addShield()
+                shieldBool = true
+            }
+        }
          
          if contact.bodyA.categoryBitMask == groundGroup || contact.bodyB.categoryBitMask == groundGroup {
                  if death {
@@ -84,7 +106,7 @@ extension GameScene {
              let coinNode = contact.bodyA.categoryBitMask == coinGroup ? contact.bodyA.node : contact.bodyB.node
              
              if sound == true {
-                 run(pickCoinPreload)
+//                 run(pickCoinPreload)
              }
              
              coinNode?.removeFromParent()
@@ -94,7 +116,7 @@ extension GameScene {
              let bigCoinNode = contact.bodyA.categoryBitMask == bigCoinGroup ? contact.bodyA.node : contact.bodyB.node
              
              if sound == true {
-                 run(pickCoinPreload)
+//                 run(pickCoinPreload)
              }
              
              bigCoinNode?.removeFromParent()
