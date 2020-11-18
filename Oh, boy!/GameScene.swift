@@ -14,10 +14,12 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     // Variables
     var sound = true
     var death = false
-    var moveSkullY = SKAction()
+    var moveEnemyY = SKAction()
     var gameViewControllerBridge: GameViewController!
     var animation = Animation()
     var shieldBool = false
+    var score = 0
+    var highScore = 0
     
     // Texture
     var bgSkyTexture: SKTexture!
@@ -32,8 +34,12 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     var wormTexture: SKTexture!
     var deadHeroTexture: SKTexture!
     var skullTexture: SKTexture!
+    var slimeMonsterTexture: SKTexture!
+    var greenMonsterTexture: SKTexture!
+    var ufoTexture: SKTexture!
     var shieldTexture: SKTexture!
-    var shieldItemTexture: SKTexture!
+    var shieldBottleTexture: SKTexture!
+    
     
     // Emitters node
     var shieldEmitter = SKEmitterNode()
@@ -49,8 +55,17 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     var bigCoin = SKSpriteNode()
     var worm = SKSpriteNode()
     var skull = SKSpriteNode()
-//    var shield = SKSpriteNode()
-    var shieldItem = SKSpriteNode()
+    var slimeMonster = SKSpriteNode()
+    var greenMonster = SKSpriteNode()
+    var ufo = SKSpriteNode()
+    var shieldBottle = SKSpriteNode()
+    
+    // Label nodes
+    var tapToPlayLabel = SKLabelNode()
+    var scoreLabel = SKLabelNode()
+    var highScoreLabel = SKLabelNode()
+    var highScoreTextLabel = SKLabelNode()
+    var stageLabel = SKLabelNode()
     
     // Sprites Objects
     var skyBgObject = SKNode()
@@ -65,6 +80,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     var shieldObject = SKNode()
     var shieldItemObject = SKNode()
     var shieldEmitterObject = SKNode()
+    var labelObject = SKNode()
     
     // Bit masks
     var heroGroup: UInt32 = 0x1 << 1
@@ -79,6 +95,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     var heroRunTexturesArray = [SKTexture]()
     var coinTexturesArray = [SKTexture]()
     var wormTexturesArray = [SKTexture]()
+    var slimeMonsterTexturesArray = [SKTexture]()
+    var greenMonsterTexturesArray = [SKTexture]()
     var heroDeathTexturesArray = [SKTexture]()
     
     //Timers
@@ -87,16 +105,23 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     var timerAddWorm = Timer()
     var timerAddSkull = Timer()
     var timerAddShieldItem = Timer()
+    var timerAddSlimeMonster = Timer()
+    var timerAddGreenMonster = Timer()
+    var timerAddUfo = Timer()
     
     // Sounds
 //    var pickCoinPreload = SKAction()
     var wormPreload = SKAction()
     var deadPreload = SKAction()
     var skullPreload = SKAction()
+    var slimeMonsterPreload = SKAction()
+    var greenMonsterPreload = SKAction()
+    var ufoPreload = SKAction()
     var shieldOnPreload = SKAction()
     var shieldOffPreload = SKAction()
     
     override func didMove(to view: SKView) {
+        
         // Background texture
         bgSkyTexture = SKTexture(imageNamed: "sky.png")
         bgMountainTexture = SKTexture(imageNamed: "mountain.png")
@@ -116,13 +141,16 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                              SKTexture(imageNamed: "Coin2.png"),
                              SKTexture(imageNamed: "Coin3.png")]
         
-        // Worm texture
+        // Enemies texture
         wormTexture = SKTexture(imageNamed: "worm_1.png")
         skullTexture = SKTexture(imageNamed: "skull.png")
+        slimeMonsterTexture = SKTexture(imageNamed: "slimeMonster0.png")
+        greenMonsterTexture = SKTexture(imageNamed: "greenMonster1.png")
+        ufoTexture = SKTexture(imageNamed: "ufo.png")
         
         // Shield texture
         shieldTexture = SKTexture(imageNamed: "engine.sks")
-        shieldItemTexture = SKTexture(imageNamed: "shieldBottle.png")
+        shieldBottleTexture = SKTexture(imageNamed: "shieldBottle.png")
         
         // Emitters
         shieldEmitter = SKEmitterNode(fileNamed: "engine.sks")!
@@ -130,14 +158,17 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         self.physicsWorld.contactDelegate = self
         
         createObjects()
+        createGame()
         
 //        pickCoinPreload = SKAction.playSoundFileNamed("pickCoin.mp3", waitForCompletion: false)
         wormPreload = SKAction.playSoundFileNamed("worm.mp3", waitForCompletion: false)
         deadPreload = SKAction.playSoundFileNamed("", waitForCompletion: false)
         skullPreload = SKAction.playSoundFileNamed("", waitForCompletion: false)
+        slimeMonsterPreload = SKAction.playSoundFileNamed("", waitForCompletion: false)
+        greenMonsterPreload = SKAction.playSoundFileNamed("", waitForCompletion: false)
+        ufoPreload = SKAction.playSoundFileNamed("", waitForCompletion: false)
         shieldOnPreload = SKAction.playSoundFileNamed("", waitForCompletion: false)
         
-        createGame()
     }
     
     func createObjects() {
@@ -154,6 +185,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         self.addChild(movingObject)
         self.addChild(shieldObject)
         self.addChild(shieldItemObject)
+        self.addChild(labelObject)
     }
     
     func createGame() {
@@ -164,8 +196,11 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(2)) {
             self.createHero()
             self.addTimer()
-            self.addWorm()
-            self.addSkull()
+//            self.addWorm()
+//            self.addSkull()
+//            self.addSlimeMonster()
+//            self.addGreenMonster()
+//            self.addUfo()
         }
         
         gameViewControllerBridge.reloadButton.isHidden = true
@@ -185,10 +220,13 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         let moveMountainBgForever = SKAction.repeatForever(SKAction.sequence([moveMountain, replaceMountainBg]))
         let moveGroundBgForever = SKAction.repeatForever(SKAction.sequence([moveGround, replaceGroundBg]))
         
+        bgSky.zPosition = -3
+        bgMountain.zPosition = -2
+        bgGround.zPosition = -1
+        
         createBgForever(moveBgForever: moveSkyBgForever, bgTexture: bgSkyTexture, bgObject: skyBgObject, bg: &bgSky)
         createBgForever(moveBgForever: moveMountainBgForever, bgTexture: bgMountainTexture, bgObject: mountainBgObject, bg: &bgMountain)
         createBgForever(moveBgForever: moveGroundBgForever, bgTexture: bgGroundTexture, bgObject: groundBgObject, bg: &bgGround)
-        
     }
     
     func createBgForever(moveBgForever: SKAction, bgTexture: SKTexture, bgObject: SKNode, bg: inout SKSpriteNode) {
@@ -202,7 +240,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                 bg.size.height = self.frame.height / 1.35
             }
             bg.run(moveBgForever)
-            bg.zPosition = -1
                        
             bgObject.addChild(bg)
         }
@@ -368,38 +405,39 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         movingObject.addChild(worm)
     }
     
+    func createMoveEnemyY(i: UInt32) -> SKAction {
+        let movementRandom = arc4random() % i
+        if movementRandom == 0 {
+            moveEnemyY = SKAction.moveTo(y: self.frame.height / 2 + 180, duration: 8)
+        } else if movementRandom == 1 {
+            moveEnemyY = SKAction.moveTo(y: self.frame.height / 2 - 180, duration: 5)
+        } else if movementRandom == 2 {
+            moveEnemyY = SKAction.moveTo(y: self.frame.height / 2 - 200, duration: 8)
+        } else if movementRandom == 3 {
+            moveEnemyY = SKAction.moveTo(y: self.frame.height / 2 + 200, duration: 5)
+        } else if movementRandom == 4 {
+            moveEnemyY = SKAction.moveTo(y: self.frame.height / 2 + 40, duration: 4)
+        } else if movementRandom == 5 {
+            moveEnemyY = SKAction.moveTo(y: self.frame.height / 2 - 35, duration: 5)
+        } else {
+            moveEnemyY = SKAction.moveTo(y: self.frame.height / 2, duration: 4)
+        }
+        return moveEnemyY
+    }
+    
     @objc func addSkull() {
         if sound {
             run(skullPreload)
         }
                          
         skull = SKSpriteNode(texture: skullTexture)
-               
-        let movementRandom = arc4random() % 9
-        let movementAmount = arc4random() % UInt32(self.frame.size.height / 2)
-        let pipeOffset = CGFloat(movementAmount) - self.frame.size.height / 4
-        if movementRandom == 0 {
-            moveSkullY = SKAction.moveTo(y: self.frame.height / 2 + 180, duration: 8)
-        } else if movementRandom == 1 {
-            moveSkullY = SKAction.moveTo(y: self.frame.height / 2 - 180, duration: 5)
-        } else if movementRandom == 2 {
-            moveSkullY = SKAction.moveTo(y: self.frame.height / 2 - 200, duration: 8)
-        } else if movementRandom == 3 {
-            moveSkullY = SKAction.moveTo(y: self.frame.height / 2 + 200, duration: 5)
-        } else if movementRandom == 4 {
-            moveSkullY = SKAction.moveTo(y: self.frame.height / 2 + 40, duration: 4)
-        } else if movementRandom == 5 {
-            moveSkullY = SKAction.moveTo(y: self.frame.height / 2 - 35, duration: 5)
-        } else {
-            moveSkullY = SKAction.moveTo(y: self.frame.height / 2, duration: 4)
-        }
-                     
-        skull.run(moveSkullY)
+        skull.run(createMoveEnemyY(i: 6))
                 
         skull.size.width = 100
         skull.size.height = 70
         skull.speed  = 2.3
-                         
+        let movementAmount = arc4random() % UInt32(self.frame.size.height / 2)
+        let pipeOffset = CGFloat(movementAmount) - self.frame.size.height / 4
         skull.position = CGPoint(x: self.frame.size.width + 150, y: self.frame.size.height / 4 - self.frame.size.height / 24 + pipeOffset)
                          
         let moveSkullX = SKAction.moveTo(x: -self.frame.size.width / 2, duration: 8)
@@ -415,40 +453,163 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         movingObject.addChild(skull)
     }
     
+    @objc func addSlimeMonster() {
+          if sound {
+               run(slimeMonsterPreload)
+           }
+                       
+           slimeMonster = SKSpriteNode(texture: slimeMonsterTexture)
+           slimeMonsterTexturesArray = [
+               SKTexture(imageNamed: "slimeMonster0.png"), SKTexture(imageNamed: "slimeMonster0.png"),
+               SKTexture(imageNamed: "slimeMonster0.png"), SKTexture(imageNamed: "slimeMonster1.png"),
+               SKTexture(imageNamed: "slimeMonster2.png"), SKTexture(imageNamed: "slimeMonster3.png"),
+               SKTexture(imageNamed: "slimeMonster4.png"), SKTexture(imageNamed: "slimeMonster5.png"),
+               SKTexture(imageNamed: "slimeMonster0.png"), SKTexture(imageNamed: "slimeMonster0.png"), SKTexture(imageNamed: "slimeMonster0.png"),   SKTexture(imageNamed: "slimeMonster0.png"),   SKTexture(imageNamed: "slimeMonster0.png")
+           ]
+           
+           let slimeMonsterAnimation = SKAction.animate(with: slimeMonsterTexturesArray, timePerFrame: 0.1)
+           let slimeMonsterAnimationRepeat = SKAction.repeatForever(slimeMonsterAnimation)
+           slimeMonster.run(slimeMonsterAnimationRepeat)
+                
+           slimeMonster.size.width = 130
+           slimeMonster.size.height = 130
+           slimeMonster.speed  = 1
+                    
+           let screenSize = UIScreen.main.bounds
+           if screenSize.width > 800 {
+               slimeMonster.position = CGPoint(x: self.frame.size.width + 150, y: self.frame.size.height / 4 - self.frame.size.height / 24 + 30)
+           } else {
+               slimeMonster.position = CGPoint(x: self.frame.size.width + 150, y: self.frame.size.height / 4 )
+           }
+                       
+           let moveSlimeMonsterX = SKAction.moveTo(x: -self.frame.size.width / 3, duration: 3)
+           slimeMonster.physicsBody = SKPhysicsBody(rectangleOf: CGSize(width: slimeMonster.size.width - 40, height: slimeMonster.size.height - 30))
+           slimeMonster.physicsBody?.categoryBitMask = objectGroup
+           slimeMonster.physicsBody?.isDynamic = false
+                       
+           let removeAction = SKAction.removeFromParent()
+           let slimeMonsterMoveBgForever = SKAction.repeatForever(SKAction.sequence([moveSlimeMonsterX, removeAction]))
+                       
+           slimeMonster.run(slimeMonsterMoveBgForever)
+           slimeMonster.zPosition = 1
+           movingObject.addChild(slimeMonster)
+       }
+    
+    @objc func addGreenMonster() {
+        if sound {
+            run(greenMonsterPreload)
+        }
+               
+        greenMonster = SKSpriteNode(texture: greenMonsterTexture)
+        greenMonsterTexturesArray = [
+            SKTexture(imageNamed: "greenMonster1.png"),
+            SKTexture(imageNamed: "greenMonster2.png"),
+            SKTexture(imageNamed: "greenMonster3.png"),
+            SKTexture(imageNamed: "greenMonster4.png"),
+            SKTexture(imageNamed: "greenMonster5.png"),
+            SKTexture(imageNamed: "greenMonster6.png")
+        ]
+        let spiderAnimation = SKAction.animate(with: greenMonsterTexturesArray, timePerFrame: 0.03)
+        let spiderHero = SKAction.repeatForever(spiderAnimation)
+        greenMonster.run(spiderHero)
+        
+        greenMonster.size.width = 90
+        greenMonster.size.height = 62
+        greenMonster.speed  = 1.5
+        
+        var scaleValue: CGFloat = 0.3
+               
+        let scaleRandom = arc4random() % UInt32(5)
+        if scaleRandom == 1 { scaleValue = 0.9 }
+        else  if scaleRandom == 2 { scaleValue = 0.6 }
+        else if scaleRandom == 3 { scaleValue = 0.8 }
+        else if scaleRandom == 4 { scaleValue = 0.7 }
+        else if scaleRandom == 0 { scaleValue = 1.0 }
+               
+        greenMonster.setScale(scaleValue)
+            
+        let screenSize = UIScreen.main.bounds
+        if screenSize.width > 800 {
+             greenMonster.position = CGPoint(x: self.frame.size.width + 150, y: self.frame.size.height / 4 - self.frame.size.height / 24 + 40)
+        } else {
+            greenMonster.position = CGPoint(x: self.frame.size.width + 150, y: self.frame.size.height / 4 - self.frame.size.height / 24)
+        }
+               
+        let moveGreenMonsterX = SKAction.moveTo(x: -self.frame.size.width / 4, duration: 2)
+        greenMonster.physicsBody = SKPhysicsBody(rectangleOf: CGSize(width: greenMonster.size.width - 40, height: greenMonster.size.height - 30))
+        greenMonster.physicsBody?.categoryBitMask = objectGroup
+        greenMonster.physicsBody?.isDynamic = false
+               
+        let removeAction = SKAction.removeFromParent()
+        let spiderMoveBgForever = SKAction.repeatForever(SKAction.sequence([moveGreenMonsterX, removeAction]))
+               
+        greenMonster.run(spiderMoveBgForever)
+        greenMonster.zPosition = 1
+        movingObject.addChild(greenMonster)
+    }
+    
+    @objc func addUfo() {
+        if sound {
+            run(ufoPreload)
+        }
+                  
+        ufo = SKSpriteNode(texture: ufoTexture)
+        ufo.run(createMoveEnemyY(i: 9))
+           
+        ufo.size.width = 70
+        ufo.size.height = 50
+        ufo.speed  = 2.8
+        let movementAmount = arc4random() % UInt32(self.frame.size.height / 2)
+        let pipeOffset = CGFloat(movementAmount) - self.frame.size.height / 4
+        ufo.position = CGPoint(x: self.frame.size.width + 150, y: self.frame.size.height / 3 - self.frame.size.height / 24 + pipeOffset)
+                  
+        let moveUfoX = SKAction.moveTo(x: -self.frame.size.width / 2, duration: 3.7)
+        ufo.physicsBody = SKPhysicsBody(rectangleOf: CGSize(width: ufo.size.width - 43, height: ufo.size.height - 27))
+        ufo.physicsBody?.categoryBitMask = objectGroup
+        ufo.physicsBody?.isDynamic = false
+                  
+        let removeAction = SKAction.removeFromParent()
+        let ufoMoveBgForever = SKAction.repeatForever(SKAction.sequence([moveUfoX, removeAction]))
+                  
+        ufo.run(ufoMoveBgForever)
+        ufo.zPosition = 1
+        movingObject.addChild(ufo)
+    }
+    
     func addShield() {
         if sound == true { run(shieldOnPreload) }
         createShieldEmitter()
     }
     
     @objc func addShieldItem() {
-        shieldItem = SKSpriteNode(texture: shieldItemTexture)
+        shieldBottle = SKSpriteNode(texture: shieldBottleTexture)
         
         let movementAmount = arc4random() % UInt32(self.frame.size.height / 2)
         let pipeOffset = CGFloat(movementAmount) - self.frame.size.height / 4
         
-        shieldItem.size.width = 50
-        shieldItem.size.height = 65
+        shieldBottle.size.width = 50
+        shieldBottle.size.height = 65
         
-        shieldItem.position = CGPoint(x: self.size.width + 50, y: 0 + shieldItemTexture.size().height + self.size.height / 45 + pipeOffset)
-        shieldItem.physicsBody = SKPhysicsBody(rectangleOf: CGSize(width: shieldItem.size.width - 20, height: shieldItem.size.height - 20))
-        shieldItem.physicsBody?.restitution = 0
+        shieldBottle.position = CGPoint(x: self.size.width + 50, y: 0 + shieldBottleTexture.size().height - pipeOffset)
+        shieldBottle.physicsBody = SKPhysicsBody(rectangleOf: CGSize(width: shieldBottle.size.width - 20, height: shieldBottle.size.height - 20))
+        shieldBottle.physicsBody?.restitution = 0
         
         let moveShield = SKAction.moveBy(x: -self.size.width * 2, y: 0, duration: 5)
         let removeAction = SKAction.removeFromParent()
         let shieldItemMoveBgForever = SKAction.repeatForever(SKAction.sequence([moveShield, removeAction]))
-        shieldItem.run(shieldItemMoveBgForever)
+        shieldBottle.run(shieldItemMoveBgForever)
         
-        shieldItem.setScale(0.9)
+        shieldBottle.setScale(0.9)
         
-        shieldItem.physicsBody?.isDynamic = false
-        shieldItem.physicsBody?.categoryBitMask = shieldGroup
-        shieldItem.zPosition = 1
-        shieldItemObject.addChild(shieldItem)
+        shieldBottle.physicsBody?.isDynamic = false
+        shieldBottle.physicsBody?.categoryBitMask = shieldGroup
+        shieldBottle.zPosition = 1
+        shieldItemObject.addChild(shieldBottle)
     }
     
     func createShieldEmitter() {
         shieldEmitter = SKEmitterNode(fileNamed: "engine.sks")!
-        shieldObject.zPosition = 1
+        shieldObject.zPosition = 0
         shieldObject.addChild(shieldEmitter)
        }
     
@@ -456,6 +617,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         mountainBgObject.isPaused = true
         groundBgObject.isPaused = true
         hero.texture = SKTexture(imageNamed: "fail3.png")
+        scene?.speed = 0
         hero.speed = 0
         worm.removeAllChildren()
         hero.removeAllChildren()
@@ -486,6 +648,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         timerAddBigCoin.invalidate()
         timerAddSkull.invalidate()
         timerAddWorm.invalidate()
+        timerAddSlimeMonster.invalidate()
+        timerAddGreenMonster.invalidate()
         timerAddShieldItem.invalidate()
        
         addTimer()
@@ -496,6 +660,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         timerAddBigCoin.invalidate()
         timerAddWorm.invalidate()
         timerAddSkull.invalidate()
+        timerAddSlimeMonster.invalidate()
+        timerAddGreenMonster.invalidate()
         timerAddShieldItem.invalidate()
            
         timerAddCoin = Timer.scheduledTimer(timeInterval: 2.83,
@@ -508,7 +674,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                                                selector: #selector(GameScene.bigCoinAdd),
                                                userInfo: nil,
                                                repeats: true)
-        timerAddWorm = Timer.scheduledTimer(timeInterval: 5.56,
+        timerAddWorm = Timer.scheduledTimer(timeInterval: 4.56,
                                             target: self,
                                             selector: #selector(GameScene.addWorm),
                                             userInfo: nil,
@@ -522,6 +688,21 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                                                   selector: #selector(GameScene.addShieldItem),
                                                   userInfo: nil,
                                                   repeats: true)
+        timerAddShieldItem = Timer.scheduledTimer(timeInterval: 6.825,
+                                                  target: self,
+                                                  selector: #selector(GameScene.addSlimeMonster),
+                                                  userInfo: nil,
+                                                  repeats: true)
+        timerAddGreenMonster = Timer.scheduledTimer(timeInterval: 11.763,
+                                                    target: self,
+                                                    selector: #selector(GameScene.addGreenMonster),
+                                                    userInfo: nil,
+                                                    repeats: true)
+        timerAddGreenMonster = Timer.scheduledTimer(timeInterval: 6.363,
+                                                    target: self,
+                                                    selector: #selector(GameScene.addUfo),
+                                                    userInfo: nil,
+                                                    repeats: true)
     }
     
     override func didFinishUpdate() {

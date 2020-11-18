@@ -23,7 +23,7 @@ extension GameScene {
                 animation.shakeAndFlashAnimation(view: self.view!)
                 
                 if sound {
-                run(deadPreload)
+//                run(deadPreload)
                 }
                                  
                 hero.physicsBody?.allowsRotation = false
@@ -32,12 +32,12 @@ extension GameScene {
                 timerAddBigCoin.invalidate()
                 timerAddWorm.invalidate()
                 timerAddSkull.invalidate()
+                timerAddShieldItem.invalidate()
+                timerAddSlimeMonster.invalidate()
+                timerAddGreenMonster.invalidate()
                                  
-                heroDeathTexturesArray = [
-                                 SKTexture(imageNamed: "fail.png"),
-                                 SKTexture(imageNamed: "fail2.png"),
-                                 SKTexture(imageNamed: "fail3.png")
-                     ]
+                heroDeathTexturesArray = [SKTexture(imageNamed: "fail0.png"),
+                                          SKTexture(imageNamed: "fail.png")]
                 hero.size.height = 85
                 hero.size.width = 130
                 hero.position = CGPoint(x: self.size.width - 100, y: 0)
@@ -58,7 +58,7 @@ extension GameScene {
                 shieldObject.removeAllChildren()
                 shieldBool = false
                 if sound {
-                    run(shieldOffPreload)
+//                    run(shieldOffPreload)
                 }
             }
          }
@@ -77,15 +77,6 @@ extension GameScene {
                  if death {
                      deathAction()
                  } else {
-//                     heroRunTexturesArray = [
-//                     SKTexture(imageNamed: "run_1.png"),
-//                     SKTexture(imageNamed: "run_2.png"),
-//                     SKTexture(imageNamed: "run_3.png"),
-//                     SKTexture(imageNamed: "run_4.png"),
-//                     SKTexture(imageNamed: "run_5.png"),
-//                     SKTexture(imageNamed: "run_6.png"),
-//
-//                                ]
                     heroRunTexturesArray = [
                     SKTexture(imageNamed: "frame-1.png"),
                     SKTexture(imageNamed: "frame-2.png"),
@@ -95,11 +86,11 @@ extension GameScene {
                     SKTexture(imageNamed: "frame-6.png"),
                         
                                ]
-                     let heroRunAnimation = SKAction.animate(with: heroRunTexturesArray, timePerFrame: 0.08)
-                     let heroRun = SKAction.repeatForever(heroRunAnimation)
+                    let heroRunAnimation = SKAction.animate(with: heroRunTexturesArray, timePerFrame: 0.08)
+                    let heroRun = SKAction.repeatForever(heroRunAnimation)
                                 
-                     hero.run(heroRun)
-                 }
+                    hero.run(heroRun)
+                }
          }
          
          if contact.bodyA.categoryBitMask == coinGroup || contact.bodyB.categoryBitMask == coinGroup {
