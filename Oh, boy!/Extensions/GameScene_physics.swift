@@ -55,14 +55,24 @@ extension GameScene {
                  if death {
                      deathAction()
                  } else {
-                     heroRunTexturesArray = [
-                     SKTexture(imageNamed: "run_1.png"),
-                     SKTexture(imageNamed: "run_2.png"),
-                     SKTexture(imageNamed: "run_3.png"),
-                     SKTexture(imageNamed: "run_4.png"),
-                     SKTexture(imageNamed: "run_5.png"),
-                     SKTexture(imageNamed: "run_6.png"),
-                                ]
+//                     heroRunTexturesArray = [
+//                     SKTexture(imageNamed: "run_1.png"),
+//                     SKTexture(imageNamed: "run_2.png"),
+//                     SKTexture(imageNamed: "run_3.png"),
+//                     SKTexture(imageNamed: "run_4.png"),
+//                     SKTexture(imageNamed: "run_5.png"),
+//                     SKTexture(imageNamed: "run_6.png"),
+//
+//                                ]
+                    heroRunTexturesArray = [
+                    SKTexture(imageNamed: "frame-1.png"),
+                    SKTexture(imageNamed: "frame-2.png"),
+                    SKTexture(imageNamed: "frame-3.png"),
+                    SKTexture(imageNamed: "frame-4.png"),
+                    SKTexture(imageNamed: "frame-5.png"),
+                    SKTexture(imageNamed: "frame-6.png"),
+                        
+                               ]
                      let heroRunAnimation = SKAction.animate(with: heroRunTexturesArray, timePerFrame: 0.08)
                      let heroRun = SKAction.repeatForever(heroRunAnimation)
                                 
