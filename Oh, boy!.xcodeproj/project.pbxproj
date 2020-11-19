@@ -20,8 +20,14 @@
 		63F1F93725644AB300798218 /* worm.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 63F1F93625644AB300798218 /* worm.mp3 */; };
 		63F1F939256515E600798218 /* Animation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63F1F938256515E600798218 /* Animation.swift */; };
 		63F1F93B25651A2100798218 /* Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63F1F93A25651A2100798218 /* Utils.swift */; };
-		63F1F9412565228500798218 /* Fire.sks in Resources */ = {isa = PBXBuildFile; fileRef = 63F1F9402565228500798218 /* Fire.sks */; };
 		63F1F943256534DF00798218 /* engine.sks in Resources */ = {isa = PBXBuildFile; fileRef = 63F1F942256534DF00798218 /* engine.sks */; };
+		63F1F945256582F800798218 /* MainViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63F1F944256582F800798218 /* MainViewController.swift */; };
+		63F1F948256584E800798218 /* SKTAudio.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63F1F947256584E800798218 /* SKTAudio.swift */; };
+		63F1F94B2565898100798218 /* Model.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63F1F94A2565898100798218 /* Model.swift */; };
+		63F1F94D25658B4B00798218 /* LevelViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63F1F94C25658B4B00798218 /* LevelViewController.swift */; };
+		63F1F94F25658E7A00798218 /* SelectBgViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63F1F94E25658E7A00798218 /* SelectBgViewController.swift */; };
+		63F1F95925658FDB00798218 /* bg1.png in Resources */ = {isa = PBXBuildFile; fileRef = 63F1F95825658FDB00798218 /* bg1.png */; };
+		63F1F95B25659C6600798218 /* bg2.png in Resources */ = {isa = PBXBuildFile; fileRef = 63F1F95A25659C6600798218 /* bg2.png */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -40,8 +46,14 @@
 		63F1F93625644AB300798218 /* worm.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = worm.mp3; sourceTree = "<group>"; };
 		63F1F938256515E600798218 /* Animation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Animation.swift; sourceTree = "<group>"; };
 		63F1F93A25651A2100798218 /* Utils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Utils.swift; sourceTree = "<group>"; };
-		63F1F9402565228500798218 /* Fire.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = Fire.sks; sourceTree = "<group>"; };
 		63F1F942256534DF00798218 /* engine.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = engine.sks; sourceTree = "<group>"; };
+		63F1F944256582F800798218 /* MainViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainViewController.swift; sourceTree = "<group>"; };
+		63F1F947256584E800798218 /* SKTAudio.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SKTAudio.swift; sourceTree = "<group>"; };
+		63F1F94A2565898100798218 /* Model.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Model.swift; sourceTree = "<group>"; };
+		63F1F94C25658B4B00798218 /* LevelViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LevelViewController.swift; sourceTree = "<group>"; };
+		63F1F94E25658E7A00798218 /* SelectBgViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectBgViewController.swift; sourceTree = "<group>"; };
+		63F1F95825658FDB00798218 /* bg1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = bg1.png; sourceTree = "<group>"; };
+		63F1F95A25659C6600798218 /* bg2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = bg2.png; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -75,12 +87,14 @@
 			isa = PBXGroup;
 			children = (
 				63F1F9122563D2B100798218 /* AppDelegate.swift */,
+				63F1F95825658FDB00798218 /* bg1.png */,
+				63F1F95A25659C6600798218 /* bg2.png */,
 				63F1F9142563D2B100798218 /* GameScene.sks */,
 				63F1F9182563D2B100798218 /* GameScene.swift */,
-				63F1F9402565228500798218 /* Fire.sks */,
 				63F1F942256534DF00798218 /* engine.sks */,
 				63F1F938256515E600798218 /* Animation.swift */,
-				63F1F93A25651A2100798218 /* Utils.swift */,
+				63F1F9492565897200798218 /* Model */,
+				63F1F9462565849D00798218 /* Helpers */,
 				63F1F93525641CE700798218 /* ViewControllers */,
 				63F1F93325641CB100798218 /* Extensions */,
 				63F1F93425641CCB00798218 /* UIBuilders */,
@@ -122,8 +136,28 @@
 			isa = PBXGroup;
 			children = (
 				63F1F91A2563D2B100798218 /* GameViewController.swift */,
+				63F1F94C25658B4B00798218 /* LevelViewController.swift */,
+				63F1F94E25658E7A00798218 /* SelectBgViewController.swift */,
+				63F1F944256582F800798218 /* MainViewController.swift */,
 			);
 			path = ViewControllers;
+			sourceTree = "<group>";
+		};
+		63F1F9462565849D00798218 /* Helpers */ = {
+			isa = PBXGroup;
+			children = (
+				63F1F93A25651A2100798218 /* Utils.swift */,
+				63F1F947256584E800798218 /* SKTAudio.swift */,
+			);
+			path = Helpers;
+			sourceTree = "<group>";
+		};
+		63F1F9492565897200798218 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				63F1F94A2565898100798218 /* Model.swift */,
+			);
+			path = Model;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -185,9 +219,10 @@
 			buildActionMask = 2147483647;
 			files = (
 				63F1F93725644AB300798218 /* worm.mp3 in Resources */,
+				63F1F95B25659C6600798218 /* bg2.png in Resources */,
 				63F1F91E2563D2B100798218 /* Main.storyboard in Resources */,
 				63F1F9152563D2B100798218 /* GameScene.sks in Resources */,
-				63F1F9412565228500798218 /* Fire.sks in Resources */,
+				63F1F95925658FDB00798218 /* bg1.png in Resources */,
 				63F1F92B2563E29B00798218 /* scene.atlas in Resources */,
 				63F1F9202563D2B200798218 /* Assets.xcassets in Resources */,
 				63F1F9232563D2B200798218 /* LaunchScreen.storyboard in Resources */,
@@ -205,10 +240,15 @@
 				63F1F92D2563E96F00798218 /* GameScene_physics.swift in Sources */,
 				63F1F9192563D2B100798218 /* GameScene.swift in Sources */,
 				63F1F92F2563EB2E00798218 /* GameScene_touches.swift in Sources */,
+				63F1F948256584E800798218 /* SKTAudio.swift in Sources */,
 				63F1F93B25651A2100798218 /* Utils.swift in Sources */,
+				63F1F94B2565898100798218 /* Model.swift in Sources */,
 				63F1F91B2563D2B100798218 /* GameViewController.swift in Sources */,
 				63F1F939256515E600798218 /* Animation.swift in Sources */,
+				63F1F94D25658B4B00798218 /* LevelViewController.swift in Sources */,
 				63F1F9132563D2B100798218 /* AppDelegate.swift in Sources */,
+				63F1F945256582F800798218 /* MainViewController.swift in Sources */,
+				63F1F94F25658E7A00798218 /* SelectBgViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

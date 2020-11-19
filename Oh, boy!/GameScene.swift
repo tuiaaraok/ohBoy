@@ -12,14 +12,14 @@ import GameplayKit
 class GameScene: SKScene, SKPhysicsContactDelegate {
     
     // Variables
-    var sound = true
     var death = false
     var moveEnemyY = SKAction()
     var gameViewControllerBridge: GameViewController!
     var animation = Animation()
     var shieldBool = false
-    var score = 0
-    var highScore = 0
+    var gameOver = 0
+    var level: Level!
+    var background: Background!
     
     // Texture
     var bgSkyTexture: SKTexture!
@@ -158,7 +158,19 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         self.physicsWorld.contactDelegate = self
         
         createObjects()
-        createGame()
+        
+        if UserDefaults.standard.object(forKey: "highScore") != nil {
+            Model.sharedInstance.highScore = UserDefaults.standard.object(forKey: "highScore") as! Int
+            highScoreLabel.text = "\( Model.sharedInstance.highScore)"
+        }
+        
+        if UserDefaults.standard.object(forKey: "totalScore") != nil {
+            Model.sharedInstance.totalscore = UserDefaults.standard.object(forKey: "totalScore") as! Int
+        }
+        
+        if gameOver == 0 {
+            createGame()
+        }
         
 //        pickCoinPreload = SKAction.playSoundFileNamed("pickCoin.mp3", waitForCompletion: false)
         wormPreload = SKAction.playSoundFileNamed("worm.mp3", waitForCompletion: false)
@@ -196,17 +208,30 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(2)) {
             self.createHero()
             self.addTimer()
-//            self.addWorm()
-//            self.addSkull()
-//            self.addSlimeMonster()
-//            self.addGreenMonster()
-//            self.addUfo()
         }
+        showTapToPlay()
+        showScore()
+        showStage()
+        highScoreTextLabel.isHidden = true
         
         gameViewControllerBridge.reloadButton.isHidden = true
+        gameViewControllerBridge.toMainMenuButton.isHidden = true
     }
     
     func createBg() {
+        
+        switch background.rawValue {
+        case 0:
+            bgSkyTexture = SKTexture(imageNamed: "sky.png")
+            bgMountainTexture = SKTexture(imageNamed: "mountain.png")
+            bgGroundTexture = SKTexture(imageNamed: "ground.png")
+        case 1:
+            bgSkyTexture = SKTexture(imageNamed: "sky_2.png")
+            bgMountainTexture = SKTexture(imageNamed: "mountain_2.png")
+            bgGroundTexture = SKTexture(imageNamed: "ground_2.png")
+        default:
+            break
+        }
         
         let moveSky = SKAction.moveBy(x: -bgSkyTexture.size().width, y: 0, duration: 50)
         let moveMountain = SKAction.moveBy(x: -bgMountainTexture.size().width, y: 0, duration: 30)
@@ -355,7 +380,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     }
     
     @objc func addWorm() {
-       if sound {
+        if Model.sharedInstance.sound {
             run(wormPreload)
         }
                     
@@ -426,19 +451,19 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     }
     
     @objc func addSkull() {
-        if sound {
+        if Model.sharedInstance.sound {
             run(skullPreload)
         }
                          
         skull = SKSpriteNode(texture: skullTexture)
-        skull.run(createMoveEnemyY(i: 6))
+        skull.run(createMoveEnemyY(i: 11))
                 
         skull.size.width = 100
         skull.size.height = 70
         skull.speed  = 2.3
         let movementAmount = arc4random() % UInt32(self.frame.size.height / 2)
         let pipeOffset = CGFloat(movementAmount) - self.frame.size.height / 4
-        skull.position = CGPoint(x: self.frame.size.width + 150, y: self.frame.size.height / 4 - self.frame.size.height / 24 + pipeOffset)
+        skull.position = CGPoint(x: self.frame.size.width + 150, y: 450 + pipeOffset)
                          
         let moveSkullX = SKAction.moveTo(x: -self.frame.size.width / 2, duration: 8)
         skull.physicsBody = SKPhysicsBody(rectangleOf: CGSize(width: skull.size.width - 43, height: skull.size.height - 27))
@@ -454,7 +479,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     }
     
     @objc func addSlimeMonster() {
-          if sound {
+          if Model.sharedInstance.sound {
                run(slimeMonsterPreload)
            }
                        
@@ -496,7 +521,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
        }
     
     @objc func addGreenMonster() {
-        if sound {
+        if Model.sharedInstance.sound {
             run(greenMonsterPreload)
         }
                
@@ -549,7 +574,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     }
     
     @objc func addUfo() {
-        if sound {
+        if Model.sharedInstance.sound {
             run(ufoPreload)
         }
                   
@@ -577,7 +602,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     }
     
     func addShield() {
-        if sound == true { run(shieldOnPreload) }
+        if Model.sharedInstance.sound { run(shieldOnPreload) }
         createShieldEmitter()
     }
     
@@ -624,10 +649,16 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     }
     
     func reloadGame() {
+        
+        if Model.sharedInstance.sound {
+            SKTAudio.sharedInstance().resumeBackgroundMusic()
+        }
         death = false
         coinObject.removeAllChildren()
         bigCoinObject.removeAllChildren()
         
+        stageLabel.text = "Stage 1"
+        gameOver = 0
         scene?.isPaused = false
            
         movingObject.removeAllChildren()
@@ -639,23 +670,177 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         groundBgObject.isPaused = false
         mountainBgObject.isPaused = false
         self.scene?.speed = 1
+        
+        if labelObject.children.count != 0 {
+            labelObject.removeAllChildren()
+        }
            
         createGround()
         createSky()
         createHero()
-           
-        timerAddCoin.invalidate()
-        timerAddBigCoin.invalidate()
-        timerAddSkull.invalidate()
-        timerAddWorm.invalidate()
-        timerAddSlimeMonster.invalidate()
-        timerAddGreenMonster.invalidate()
-        timerAddShieldItem.invalidate()
+        
+        gameViewControllerBridge.toMainMenuButton.isHidden = true
+        
+        Model.sharedInstance.score = 0
+        scoreLabel.text = "0"
+        stageLabel.isHidden = false
+        highScoreTextLabel.isHidden = true
+        showHighScore()
+        
+        timerInvalidate()
        
         addTimer()
     }
     
+    func removeAll() {
+        Model.sharedInstance.score = 0
+        scoreLabel.text = "0"
+        
+        gameOver = 0
+        
+        if labelObject.children.count != 0 {
+            labelObject.removeAllChildren()
+        }
+        
+        timerInvalidate()
+        self.removeAllActions()
+        self.removeAllChildren()
+        self.removeFromParent()
+        self.view?.removeFromSuperview()
+        gameViewControllerBridge = nil
+    }
+    
+    func showTapToPlay() {
+        tapToPlayLabel.text = "Tap to fly!"
+        tapToPlayLabel.position = CGPoint(x: self.frame.midX, y: self.frame.midY)
+        tapToPlayLabel.fontSize = 75
+        tapToPlayLabel.fontColor = .black
+        tapToPlayLabel.fontName = "MarkerFelt-Thin"
+        tapToPlayLabel.zPosition = 1
+        self.addChild(tapToPlayLabel)
+    }
+    
+    func showScore() {
+        scoreLabel.fontName = "MarkerFelt-Thin"
+        scoreLabel.text = "0"
+        scoreLabel.position = CGPoint(x: self.frame.midX, y: self.frame.maxY - 200)
+        scoreLabel.fontSize = 50
+        scoreLabel.fontColor = .black
+        scoreLabel.zPosition = 1
+        self.addChild(scoreLabel)
+    }
+    
+    func showHighScore() {
+        highScoreLabel = SKLabelNode()
+        let screenSize = UIScreen.main.bounds
+        if screenSize.width > 800 {
+            highScoreLabel.position = CGPoint(x: self.frame.maxX - 100, y: self.frame.maxY - 245)
+        } else {
+            highScoreLabel.position = CGPoint(x: self.frame.maxX - 100, y: self.frame.maxY - 210)
+        }
+        
+        highScoreLabel.fontSize = 40
+        highScoreLabel.fontName = "MarkerFelt-Thin"
+        highScoreLabel.fontColor = .black
+        highScoreLabel.isHidden = true
+        highScoreLabel.zPosition = 1
+        labelObject.addChild(highScoreLabel)
+    }
+    
+    func showHighScoreText() {
+        highScoreTextLabel = SKLabelNode()
+        let screenSize = UIScreen.main.bounds
+        if screenSize.width > 800 {
+            highScoreTextLabel.position = CGPoint(x: self.frame.maxX - 100, y: self.frame.maxY - 200)
+        } else {
+            highScoreTextLabel.position = CGPoint(x: self.frame.maxX - 100, y: self.frame.maxY - 150)
+        }
+       
+        highScoreTextLabel.fontSize = 40
+        highScoreTextLabel.fontName = "MarkerFelt-Thin"
+        highScoreTextLabel.fontColor = .black
+        highScoreTextLabel.text = "HighScore"
+        highScoreTextLabel.zPosition = 1
+        labelObject.addChild(highScoreTextLabel)
+    }
+    
+    func showStage() {
+        let screenSize = UIScreen.main.bounds
+        if screenSize.width > 800 {
+            stageLabel.position = CGPoint(x: self.frame.maxX - 60, y: self.frame.maxY - 200)
+        } else {
+            stageLabel.position = CGPoint(x: self.frame.maxX - 75, y: self.frame.maxY - 150)
+        }
+        stageLabel.fontSize = 40
+        stageLabel.fontName = "MarkerFelt-Thin"
+        stageLabel.fontColor = .black
+        stageLabel.text = "Stage 1"
+        stageLabel.zPosition = 1
+        self.addChild(stageLabel)
+    }
+    
+    func levelUp() {
+        if 1 <= Model.sharedInstance.score && Model.sharedInstance.score < 20 {
+            stageLabel.text = "Stage 1"
+            coinObject.speed = 1.05
+            bigCoinObject.speed = 1.1
+            movingObject.speed = 1.05
+            self.speed = 1.05
+        } else if 20 <= Model.sharedInstance.score && Model.sharedInstance.score < 39 {
+            stageLabel.text = "Stage 2"
+            coinObject.speed = 1.22
+            bigCoinObject.speed = 1.32
+            movingObject.speed = -1.22
+            self.speed = 1.22
+        } else if 40 <= Model.sharedInstance.score && Model.sharedInstance.score < 59 {
+            stageLabel.text = "Stage 3"
+            coinObject.speed = 1.3
+            bigCoinObject.speed = 1.42
+            movingObject.speed = 1.3
+            self.speed = 1.22
+        } else if 60 <= Model.sharedInstance.score && Model.sharedInstance.score < 100 {
+            stageLabel.text = "Stage 4"
+            coinObject.speed = 1.4
+            bigCoinObject.speed = 1.5
+            movingObject.speed = 1.5
+            self.speed = 1.22
+        }
+    }
+    
     func addTimer() {
+       timerInvalidate()
+           
+        timerAddCoin = Timer.scheduledTimer(timeInterval: 1.83, target: self, selector: #selector(GameScene.addCoin), userInfo: nil,repeats: true)
+        timerAddBigCoin = Timer.scheduledTimer(timeInterval: 9.114, target: self, selector: #selector(GameScene.bigCoinAdd), userInfo: nil,repeats: true)
+        
+        switch level.rawValue {
+        case 0: // easy
+             timerAddWorm = Timer.scheduledTimer(timeInterval: 4.56, target: self, selector: #selector(GameScene.addWorm), userInfo: nil, repeats: true)
+             timerAddSkull = Timer.scheduledTimer(timeInterval: 3.54, target: self, selector: #selector(GameScene.addSkull), userInfo: nil, repeats: true)
+             timerAddShieldItem = Timer.scheduledTimer(timeInterval: 8.45, target: self, selector: #selector(GameScene.addShieldItem), userInfo: nil, repeats: true)
+             timerAddSlimeMonster = Timer.scheduledTimer(timeInterval: 6.825, target: self, selector: #selector(GameScene.addSlimeMonster), userInfo: nil, repeats: true)
+             timerAddGreenMonster = Timer.scheduledTimer(timeInterval: 11.763, target: self, selector: #selector(GameScene.addGreenMonster), userInfo: nil, repeats: true)
+            timerAddUfo = Timer.scheduledTimer(timeInterval: 6.363, target: self, selector: #selector(GameScene.addUfo), userInfo: nil, repeats: true)
+        case 1: // medium
+            timerAddWorm = Timer.scheduledTimer(timeInterval: 3.56, target: self, selector: #selector(GameScene.addWorm), userInfo: nil, repeats: true)
+             timerAddSkull = Timer.scheduledTimer(timeInterval: 3.0, target: self, selector: #selector(GameScene.addSkull), userInfo: nil, repeats: true)
+             timerAddShieldItem = Timer.scheduledTimer(timeInterval: 15.45, target: self, selector: #selector(GameScene.addShieldItem), userInfo: nil, repeats: true)
+             timerAddSlimeMonster = Timer.scheduledTimer(timeInterval: 4.825, target: self, selector: #selector(GameScene.addSlimeMonster), userInfo: nil, repeats: true)
+             timerAddGreenMonster = Timer.scheduledTimer(timeInterval: 8.763, target: self, selector: #selector(GameScene.addGreenMonster), userInfo: nil, repeats: true)
+            timerAddUfo = Timer.scheduledTimer(timeInterval: 4.363, target: self, selector: #selector(GameScene.addUfo), userInfo: nil, repeats: true)
+        case 2: // hard
+            timerAddWorm = Timer.scheduledTimer(timeInterval: 3.034, target: self, selector: #selector(GameScene.addWorm), userInfo: nil, repeats: true)
+            timerAddSkull = Timer.scheduledTimer(timeInterval: 2.987, target: self, selector: #selector(GameScene.addSkull), userInfo: nil, repeats: true)
+             timerAddShieldItem = Timer.scheduledTimer(timeInterval: 30.45, target: self, selector: #selector(GameScene.addShieldItem), userInfo: nil, repeats: true)
+             timerAddSlimeMonster = Timer.scheduledTimer(timeInterval: 4.0, target: self, selector: #selector(GameScene.addSlimeMonster), userInfo: nil, repeats: true)
+             timerAddGreenMonster = Timer.scheduledTimer(timeInterval: 6.763, target: self, selector: #selector(GameScene.addGreenMonster), userInfo: nil, repeats: true)
+            timerAddUfo = Timer.scheduledTimer(timeInterval: 3.789, target: self, selector: #selector(GameScene.addUfo), userInfo: nil, repeats: true)
+        default:
+            break
+        }
+    }
+    
+    func timerInvalidate() {
         timerAddCoin.invalidate()
         timerAddBigCoin.invalidate()
         timerAddWorm.invalidate()
@@ -663,46 +848,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         timerAddSlimeMonster.invalidate()
         timerAddGreenMonster.invalidate()
         timerAddShieldItem.invalidate()
-           
-        timerAddCoin = Timer.scheduledTimer(timeInterval: 2.83,
-                                            target: self,
-                                            selector: #selector(GameScene.addCoin),
-                                            userInfo: nil,
-                                            repeats: true)
-        timerAddBigCoin = Timer.scheduledTimer(timeInterval: 9.114,
-                                               target: self,
-                                               selector: #selector(GameScene.bigCoinAdd),
-                                               userInfo: nil,
-                                               repeats: true)
-        timerAddWorm = Timer.scheduledTimer(timeInterval: 4.56,
-                                            target: self,
-                                            selector: #selector(GameScene.addWorm),
-                                            userInfo: nil,
-                                            repeats: true)
-        timerAddSkull = Timer.scheduledTimer(timeInterval: 8.54,
-                                             target: self,
-                                             selector: #selector(GameScene.addSkull),
-                                             userInfo: nil, repeats: true)
-        timerAddShieldItem = Timer.scheduledTimer(timeInterval: 3.45,
-                                                  target: self,
-                                                  selector: #selector(GameScene.addShieldItem),
-                                                  userInfo: nil,
-                                                  repeats: true)
-        timerAddShieldItem = Timer.scheduledTimer(timeInterval: 6.825,
-                                                  target: self,
-                                                  selector: #selector(GameScene.addSlimeMonster),
-                                                  userInfo: nil,
-                                                  repeats: true)
-        timerAddGreenMonster = Timer.scheduledTimer(timeInterval: 11.763,
-                                                    target: self,
-                                                    selector: #selector(GameScene.addGreenMonster),
-                                                    userInfo: nil,
-                                                    repeats: true)
-        timerAddGreenMonster = Timer.scheduledTimer(timeInterval: 6.363,
-                                                    target: self,
-                                                    selector: #selector(GameScene.addUfo),
-                                                    userInfo: nil,
-                                                    repeats: true)
+        timerAddUfo.invalidate()
     }
     
     override func didFinishUpdate() {

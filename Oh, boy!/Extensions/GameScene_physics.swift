@@ -11,9 +11,14 @@ import SpriteKit
 
 extension GameScene {
     
-  func didBegin(_ contact: SKPhysicsContact) {
-         
-         let objectNode = contact.bodyA.categoryBitMask == objectGroup ? contact.bodyA.node : contact.bodyB.node
+    func didBegin(_ contact: SKPhysicsContact) {
+        
+        let objectNode = contact.bodyA.categoryBitMask == objectGroup ? contact.bodyA.node : contact.bodyB.node
+        
+        if Model.sharedInstance.score > Model.sharedInstance.highScore {
+            Model.sharedInstance.highScore = Model.sharedInstance.score
+        }
+        UserDefaults.standard.set( Model.sharedInstance.highScore, forKey: "highScore")
          
          if contact.bodyA.categoryBitMask == objectGroup || contact.bodyB.categoryBitMask == objectGroup {
             death = true
@@ -22,19 +27,15 @@ extension GameScene {
             if !shieldBool {
                 animation.shakeAndFlashAnimation(view: self.view!)
                 
-                if sound {
+                if Model.sharedInstance.sound {
 //                run(deadPreload)
                 }
+                
+                Model.sharedInstance.totalscore = Model.sharedInstance.totalscore + Model.sharedInstance.score
                                  
                 hero.physicsBody?.allowsRotation = false
-                                 
-                timerAddCoin.invalidate()
-                timerAddBigCoin.invalidate()
-                timerAddWorm.invalidate()
-                timerAddSkull.invalidate()
-                timerAddShieldItem.invalidate()
-                timerAddSlimeMonster.invalidate()
-                timerAddGreenMonster.invalidate()
+
+                timerInvalidate()
                                  
                 heroDeathTexturesArray = [SKTexture(imageNamed: "fail0.png"),
                                           SKTexture(imageNamed: "fail.png")]
@@ -44,29 +45,45 @@ extension GameScene {
                 let heroDeathAnimation = SKAction.animate(with: heroDeathTexturesArray,
                                                          timePerFrame: 0.1)
                 hero.run(heroDeathAnimation)
+                
+                showHighScore()
+                 gameOver = 1
                      
                 if death {
                     deathAction()
                                                
                     DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                        self.showHighScoreText()
                         self.gameViewControllerBridge.reloadButton.isHidden = false
+                        self.gameViewControllerBridge.toMainMenuButton.isHidden = false
+                        self.stageLabel.isHidden = true
+                        
+                        if Model.sharedInstance.score > Model.sharedInstance.highScore {
+                            Model.sharedInstance.highScore = Model.sharedInstance.score
+                        }
+                        
+                        self.highScoreLabel.isHidden = false
+                        self.highScoreTextLabel.isHidden = false
+                        self.highScoreLabel.text = "\( Model.sharedInstance.highScore)"
                     }
                 }
+                SKTAudio.sharedInstance().pauseBackgroundMusic()
             } else {
                 death = false
                 objectNode?.removeFromParent()
                 shieldObject.removeAllChildren()
                 shieldBool = false
-                if sound {
+                if Model.sharedInstance.sound {
 //                    run(shieldOffPreload)
                 }
             }
          }
     
         if contact.bodyA.categoryBitMask == shieldGroup || contact.bodyB.categoryBitMask == shieldGroup {
+            levelUp()
             let shieldNode = contact.bodyA.categoryBitMask == shieldGroup ? contact.bodyA.node : contact.bodyB.node
             if !shieldBool {
-                if sound { run(shieldOnPreload) }
+                if Model.sharedInstance.sound { run(shieldOnPreload) }
                 shieldNode?.removeFromParent()
                 addShield()
                 shieldBool = true
@@ -74,9 +91,10 @@ extension GameScene {
         }
          
          if contact.bodyA.categoryBitMask == groundGroup || contact.bodyB.categoryBitMask == groundGroup {
-                 if death {
-                     deathAction()
-                 } else {
+            if gameOver == 0 {
+                if death {
+                    deathAction()
+                } else {
                     heroRunTexturesArray = [
                     SKTexture(imageNamed: "frame-1.png"),
                     SKTexture(imageNamed: "frame-2.png"),
@@ -84,33 +102,94 @@ extension GameScene {
                     SKTexture(imageNamed: "frame-4.png"),
                     SKTexture(imageNamed: "frame-5.png"),
                     SKTexture(imageNamed: "frame-6.png"),
-                        
-                               ]
+                    ]
                     let heroRunAnimation = SKAction.animate(with: heroRunTexturesArray, timePerFrame: 0.08)
                     let heroRun = SKAction.repeatForever(heroRunAnimation)
-                                
+                                            
                     hero.run(heroRun)
                 }
+            }
          }
          
          if contact.bodyA.categoryBitMask == coinGroup || contact.bodyB.categoryBitMask == coinGroup {
+            levelUp()
              let coinNode = contact.bodyA.categoryBitMask == coinGroup ? contact.bodyA.node : contact.bodyB.node
              
-             if sound == true {
+             if Model.sharedInstance.sound {
 //                 run(pickCoinPreload)
              }
+            
+            switch stageLabel.text! {
+            case "Stage 1":
+                if level.rawValue == 0 {
+                    Model.sharedInstance.score = Model.sharedInstance.score + 1
+                } else if level.rawValue == 1 {
+                     Model.sharedInstance.score = Model.sharedInstance.score + 2
+                } else if level.rawValue == 2 {
+                    Model.sharedInstance.score = Model.sharedInstance.score + 3
+                }
+            case "Stage 2":
+                if level.rawValue == 0 {
+                    Model.sharedInstance.score = Model.sharedInstance.score + 2
+                } else if level.rawValue == 1 {
+                     Model.sharedInstance.score = Model.sharedInstance.score + 3
+                } else if level.rawValue == 2 {
+                    Model.sharedInstance.score = Model.sharedInstance.score + 4
+                }
+            default:
+                if level.rawValue == 0 {
+                    Model.sharedInstance.score = Model.sharedInstance.score + 3
+                } else if level.rawValue == 1 {
+                     Model.sharedInstance.score = Model.sharedInstance.score + 4
+                } else if level.rawValue == 2 {
+                    Model.sharedInstance.score = Model.sharedInstance.score + 5
+                }
+            }
+        
+             scoreLabel.text = "\(Model.sharedInstance.score)"
              
              coinNode?.removeFromParent()
          }
          
          if contact.bodyA.categoryBitMask == bigCoinGroup || contact.bodyB.categoryBitMask == bigCoinGroup {
-             let bigCoinNode = contact.bodyA.categoryBitMask == bigCoinGroup ? contact.bodyA.node : contact.bodyB.node
+            levelUp()
+            
+            let bigCoinNode = contact.bodyA.categoryBitMask == bigCoinGroup ? contact.bodyA.node : contact.bodyB.node
              
-             if sound == true {
+             if Model.sharedInstance.sound  {
 //                 run(pickCoinPreload)
              }
+            
+            switch stageLabel.text! {
+                case "Stage 1":
+                    if level.rawValue == 0 {
+                        Model.sharedInstance.score = Model.sharedInstance.score + 2
+                    } else if level.rawValue == 1 {
+                        Model.sharedInstance.score = Model.sharedInstance.score + 3
+                    } else if level.rawValue == 2 {
+                        Model.sharedInstance.score = Model.sharedInstance.score + 4
+                    }
+                case "Stage 2":
+                    if level.rawValue == 0 {
+                        Model.sharedInstance.score = Model.sharedInstance.score + 3
+                    } else if level.rawValue == 1 {
+                        Model.sharedInstance.score = Model.sharedInstance.score + 4
+                    } else if level.rawValue == 2 {
+                        Model.sharedInstance.score = Model.sharedInstance.score + 5
+                    }
+                default:
+                    if level.rawValue == 0 {
+                        Model.sharedInstance.score = Model.sharedInstance.score + 4
+                    } else if level.rawValue == 1 {
+                        Model.sharedInstance.score = Model.sharedInstance.score + 5
+                    } else if level.rawValue == 2 {
+                        Model.sharedInstance.score = Model.sharedInstance.score + 6
+                    }
+                }
+            scoreLabel.text = "\(Model.sharedInstance.score)"
              
              bigCoinNode?.removeFromParent()
          }
+        UserDefaults.standard.set( Model.sharedInstance.totalscore, forKey: "totalScore")
      }
 }

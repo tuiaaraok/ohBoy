@@ -10,15 +10,23 @@ import Foundation
 import SpriteKit
 
 extension GameScene {
+    
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+
+       if gameOver == 0 {
+           if !tapToPlayLabel.isHidden {
+               tapToPlayLabel.isHidden = true
+           }
            
-        hero.physicsBody?.velocity = CGVector.zero
-        hero.physicsBody?.applyImpulse(CGVector(dx: 0, dy: 180))
-           
-        heroflyTexturesArray = [SKTexture(imageNamed: "jump_up.png")]
-        let heroFlyAnimation = SKAction.animate(with: heroflyTexturesArray, timePerFrame: 0.1)
-        let flyHero = SKAction.repeatForever(heroFlyAnimation)
-        hero.run(flyHero)
-           
-    }
+           if gameOver == 0{
+               hero.physicsBody?.velocity = CGVector.zero
+               hero.physicsBody?.applyImpulse(CGVector(dx: 0, dy: 150))
+                                 
+               heroflyTexturesArray = [SKTexture(imageNamed: "jump_up.png")]
+               let heroFlyAnimation = SKAction.animate(with: heroflyTexturesArray, timePerFrame: 0.02)
+               let flyHero = SKAction.repeatForever(heroFlyAnimation)
+               hero.run(flyHero)
+           }
+       }
+   }
 }

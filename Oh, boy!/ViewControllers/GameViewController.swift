@@ -14,9 +14,14 @@ class GameViewController: UIViewController {
     
     var scene = GameScene(size: CGSize(width: 1024, height: 768))
     var textureAtlas = SKTextureAtlas(named: "scene.atlas")
+    
+    //Variables
+    var selectedBg: Background!
+    var selectedLevel: Level!
 
     @IBOutlet weak var reloadButton: UIButton!
     @IBOutlet weak var loadingView: UIView!
+    @IBOutlet weak var toMainMenuButton: UIButton!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -28,6 +33,8 @@ class GameViewController: UIViewController {
         view.ignoresSiblingOrder = true
             
         scene.scaleMode = .aspectFill
+        scene.background = selectedBg
+        scene.level = selectedLevel
         scene.gameViewControllerBridge = self
         
         textureAtlas.preload {
@@ -40,12 +47,21 @@ class GameViewController: UIViewController {
     }
     
     @IBAction func reloadGameButtonPressed(_ sender: UIButton) {
+        SKTAudio.sharedInstance().playSoundEffect(filename: "")
         scene.reloadGame()
         scene.gameViewControllerBridge = self
         reloadButton.isHidden = true
     }
     
-
+    @IBAction func mainMenuButtonPressed() {
+        navigationController?.popViewController(animated: false)
+        navigationController?.dismiss(animated: false, completion: nil)
+        
+        DispatchQueue.main.async {
+            self.scene.removeAll()
+        }
+    }
+    
     override var shouldAutorotate: Bool {
         return true
     }
