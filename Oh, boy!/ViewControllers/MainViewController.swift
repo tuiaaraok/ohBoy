@@ -19,7 +19,7 @@ class MainViewController: UIViewController {
         }
         
         if Model.sharedInstance.sound {
-            SKTAudio.sharedInstance().playBackgroundMusic(filename: "")
+            SKTAudio.sharedInstance().playBackgroundMusic(filename: "Backgr.mp3")
         }
     }
     

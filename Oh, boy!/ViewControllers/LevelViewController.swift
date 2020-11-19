@@ -15,7 +15,7 @@ class LevelViewController: UIViewController {
         super.viewDidLoad()
     }
     @IBAction func selectLevel(sender: UIButton) {
-        SKTAudio.sharedInstance().playBackgroundMusic(filename: "")
+        SKTAudio.sharedInstance().playSoundEffect(filename: "push.mp3")
         
         if let storyboard = storyboard {
             let selectBgViewController = storyboard.instantiateViewController(withIdentifier: "SelectBgViewController") as! SelectBgViewController
@@ -28,6 +28,7 @@ class LevelViewController: UIViewController {
     }
     
     @IBAction func back() {
+        SKTAudio.sharedInstance().playSoundEffect(filename: "push.mp3")
         navigationController?.popViewController(animated: true)
         navigationController?.dismiss(animated: true, completion: nil)
     }

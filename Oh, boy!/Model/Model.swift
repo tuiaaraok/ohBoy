@@ -12,8 +12,8 @@ enum Level: Int {
     case easy, medium, hard
 }
 
-enum Background: Int {
-    case bg1, bg2
+enum Background: Int, CaseIterable {
+    case bg1, bg2, bg3
 }
 
 class Model {
@@ -27,4 +27,5 @@ class Model {
     var totalscore = 0
        
     var level2UnlockValue = 200
+    var level3UnlockValue = 200
 }

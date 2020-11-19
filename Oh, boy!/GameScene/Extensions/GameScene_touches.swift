@@ -12,7 +12,10 @@ import SpriteKit
 extension GameScene {
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-
+        
+        leftShoeEmitter.isHidden = false
+        rightShoeEmitter.isHidden = false
+        
        if gameOver == 0 {
            if !tapToPlayLabel.isHidden {
                tapToPlayLabel.isHidden = true
@@ -22,10 +25,11 @@ extension GameScene {
                hero.physicsBody?.velocity = CGVector.zero
                hero.physicsBody?.applyImpulse(CGVector(dx: 0, dy: 150))
                                  
-               heroJumpTexturesArray = [SKTexture(imageNamed: "jump_up.png")]
-               let heroFlyAnimation = SKAction.animate(with: heroJumpTexturesArray, timePerFrame: 0.02)
+               heroFlyTexturesArray = [SKTexture(imageNamed: "jump_up.png")]
+               let heroFlyAnimation = SKAction.animate(with: heroFlyTexturesArray, timePerFrame: 0.02)
                let flyHero = SKAction.repeatForever(heroFlyAnimation)
                hero.run(flyHero)
+               run(heroFlyPreload)
            }
        }
    }

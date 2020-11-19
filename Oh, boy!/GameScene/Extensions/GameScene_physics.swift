@@ -26,6 +26,8 @@ extension GameScene {
             
             if !shieldBool {
                 animation.shakeAndFlashAnimation(view: self.view!)
+                leftShoeEmitter.isHidden = true
+                rightShoeEmitter.isHidden = true
                 
                 if Model.sharedInstance.sound {
 //                run(deadPreload)
@@ -56,6 +58,7 @@ extension GameScene {
                         self.showHighScoreText()
                         self.gameViewController.reloadButton.isHidden = false
                         self.gameViewController.toMainMenuButton.isHidden = false
+                        self.gameViewController.pauseButton.isHidden = true
                         self.stageLabel.isHidden = true
                         
                         if Model.sharedInstance.score > Model.sharedInstance.highScore {
@@ -91,6 +94,8 @@ extension GameScene {
         }
          
          if contact.bodyA.categoryBitMask == groundGroup || contact.bodyB.categoryBitMask == groundGroup {
+             leftShoeEmitter.isHidden = true
+             rightShoeEmitter.isHidden = true
             if gameOver == 0 {
                 if death {
                     deathAction()
@@ -116,7 +121,7 @@ extension GameScene {
              let coinNode = contact.bodyA.categoryBitMask == coinGroup ? contact.bodyA.node : contact.bodyB.node
              
              if Model.sharedInstance.sound {
-//                 run(pickCoinPreload)
+                 run(pickCoinPreload)
              }
             
             switch stageLabel.text! {
@@ -157,7 +162,7 @@ extension GameScene {
             let bigCoinNode = contact.bodyA.categoryBitMask == bigCoinGroup ? contact.bodyA.node : contact.bodyB.node
              
              if Model.sharedInstance.sound  {
-//                 run(pickCoinPreload)
+                 run(pickCoinPreload)
              }
             
             switch stageLabel.text! {

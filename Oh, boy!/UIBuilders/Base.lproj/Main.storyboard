@@ -140,20 +140,15 @@
                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="bg2.png" translatesAutoresizingMaskIntoConstraints="NO" id="hDX-5c-BMc">
                                 <rect key="frame" x="0.0" y="0.0" width="896" height="414"/>
                             </imageView>
-                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="rfW-cP-aen">
-                                <rect key="frame" x="60" y="132" width="150" height="150"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="rfW-cP-aen">
+                                <rect key="frame" x="159" y="132" width="150" height="150"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="150" id="Blr-GT-AvG"/>
+                                    <constraint firstAttribute="height" constant="150" id="W0h-Xf-zbK"/>
+                                </constraints>
                                 <state key="normal" backgroundImage="bg1.png"/>
                                 <connections>
                                     <action selector="selectBgWithSender:" destination="gLL-h3-Z6r" eventType="touchUpInside" id="uQs-1G-wem"/>
-                                </connections>
-                            </button>
-                            <button opaque="NO" tag="1" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="2nW-CT-V1n">
-                                <rect key="frame" x="264" y="132" width="150" height="150"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <state key="normal" backgroundImage="bg2.png"/>
-                                <connections>
-                                    <action selector="selectBgWithSender:" destination="gLL-h3-Z6r" eventType="touchUpInside" id="n9u-Ff-kUF"/>
                                 </connections>
                             </button>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Total point" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="bDr-Je-yx6">
@@ -187,16 +182,48 @@
                                     <action selector="backButtonPressed:" destination="gLL-h3-Z6r" eventType="touchUpInside" id="UZb-gQ-1WN"/>
                                 </connections>
                             </button>
+                            <button opaque="NO" tag="1" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="2nW-CT-V1n">
+                                <rect key="frame" x="373" y="132" width="150" height="150"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="150" id="EUE-nk-3Fi"/>
+                                    <constraint firstAttribute="width" constant="150" id="nry-7J-prJ"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" name="AstounderSquaredBB-BoldItalic" family="Astounder Squared BB" pointSize="27"/>
+                                <state key="normal" backgroundImage="bg200points.png">
+                                    <color key="titleColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <connections>
+                                    <action selector="selectBgWithSender:" destination="gLL-h3-Z6r" eventType="touchUpInside" id="n9u-Ff-kUF"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="6TD-hH-dcu">
+                                <rect key="frame" x="587" y="132" width="150" height="150"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="150" id="Pob-3d-apW"/>
+                                    <constraint firstAttribute="height" constant="150" id="pET-FM-8JN"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" name="AstounderSquaredBB-BoldItalic" family="Astounder Squared BB" pointSize="27"/>
+                                <state key="normal" backgroundImage="bg3500points.png">
+                                    <color key="titleColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                    <color key="titleShadowColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                </state>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                         <constraints>
+                            <constraint firstItem="6TD-hH-dcu" firstAttribute="leading" secondItem="2nW-CT-V1n" secondAttribute="trailing" constant="64" id="287-aP-9s3"/>
                             <constraint firstItem="bDr-Je-yx6" firstAttribute="top" secondItem="F1l-bB-lS2" secondAttribute="top" constant="20" id="3D8-27-Ucu"/>
+                            <constraint firstItem="6TD-hH-dcu" firstAttribute="centerY" secondItem="eCE-cS-Iga" secondAttribute="centerY" id="P4Q-Oa-9Oz"/>
                             <constraint firstItem="B8m-Sa-4sj" firstAttribute="centerX" secondItem="eCE-cS-Iga" secondAttribute="centerX" id="Q5L-js-A07"/>
                             <constraint firstItem="bDr-Je-yx6" firstAttribute="centerX" secondItem="eCE-cS-Iga" secondAttribute="centerX" id="UQK-ed-zMP"/>
                             <constraint firstItem="B8m-Sa-4sj" firstAttribute="top" secondItem="bDr-Je-yx6" secondAttribute="bottom" constant="16" id="VFk-aE-1RH"/>
+                            <constraint firstItem="2nW-CT-V1n" firstAttribute="centerX" secondItem="eCE-cS-Iga" secondAttribute="centerX" id="bbH-uN-voM"/>
                             <constraint firstItem="hDX-5c-BMc" firstAttribute="top" secondItem="F1l-bB-lS2" secondAttribute="top" id="cve-Ab-Z73"/>
                             <constraint firstItem="hDX-5c-BMc" firstAttribute="leading" secondItem="eCE-cS-Iga" secondAttribute="leading" id="eZQ-A4-k6t"/>
+                            <constraint firstItem="2nW-CT-V1n" firstAttribute="centerY" secondItem="eCE-cS-Iga" secondAttribute="centerY" id="inv-nY-r8s"/>
+                            <constraint firstItem="rfW-cP-aen" firstAttribute="centerY" secondItem="eCE-cS-Iga" secondAttribute="centerY" id="iys-aE-2LY"/>
                             <constraint firstAttribute="bottom" secondItem="hDX-5c-BMc" secondAttribute="bottom" id="jdZ-yA-7TY"/>
+                            <constraint firstItem="2nW-CT-V1n" firstAttribute="leading" secondItem="rfW-cP-aen" secondAttribute="trailing" constant="64" id="qQA-eq-Y74"/>
                             <constraint firstAttribute="trailing" secondItem="hDX-5c-BMc" secondAttribute="trailing" id="vh4-Km-1Nl"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="F1l-bB-lS2"/>
@@ -204,6 +231,7 @@
                     <connections>
                         <outlet property="bg1" destination="rfW-cP-aen" id="hZn-7B-hlX"/>
                         <outlet property="bg2" destination="2nW-CT-V1n" id="Ose-AW-iQx"/>
+                        <outlet property="bg3" destination="6TD-hH-dcu" id="bdb-BZ-dkR"/>
                         <outlet property="totalPoint" destination="B8m-Sa-4sj" id="4gA-hF-0SL"/>
                     </connections>
                 </viewController>
@@ -220,9 +248,9 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="qbq-dG-xKQ">
-                                <rect key="frame" x="273" y="100" width="350" height="77"/>
+                                <rect key="frame" x="273" y="105.5" width="350" height="67"/>
                                 <constraints>
-                                    <constraint firstAttribute="height" constant="77" id="AeM-37-AxD"/>
+                                    <constraint firstAttribute="height" constant="67" id="AeM-37-AxD"/>
                                     <constraint firstAttribute="width" constant="350" id="GQt-0F-EuQ"/>
                                 </constraints>
                                 <fontDescription key="fontDescription" name="AstounderSquaredBB-BoldItalic" family="Astounder Squared BB" pointSize="50"/>
@@ -234,9 +262,9 @@
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="hwM-Zy-NU4">
-                                <rect key="frame" x="332.5" y="226" width="231" height="67"/>
+                                <rect key="frame" x="332.5" y="241.5" width="231" height="55"/>
                                 <constraints>
-                                    <constraint firstAttribute="height" constant="67" id="0dn-6t-V0k"/>
+                                    <constraint firstAttribute="height" constant="55" id="0dn-6t-V0k"/>
                                     <constraint firstAttribute="width" constant="231" id="Wo9-L9-DJB"/>
                                 </constraints>
                                 <fontDescription key="fontDescription" name="AstounderSquaredBB-BoldItalic" family="Astounder Squared BB" pointSize="50"/>
@@ -245,6 +273,34 @@
                                 </state>
                                 <connections>
                                     <action selector="mainMenuButtonPressed" destination="BV1-FR-VrT" eventType="touchUpInside" id="pIE-Kg-UkC"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="wsh-dA-ZaI">
+                                <rect key="frame" x="321.5" y="179.5" width="253" height="55"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="55" id="cVP-Pw-iGD"/>
+                                    <constraint firstAttribute="width" constant="253" id="snt-Zw-fGg"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" name="AstounderSquaredBB-BoldItalic" family="Astounder Squared BB" pointSize="50"/>
+                                <state key="normal" title="Continue">
+                                    <color key="titleColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                </state>
+                                <connections>
+                                    <action selector="continueButtonPressed" destination="BV1-FR-VrT" eventType="touchUpInside" id="L96-ag-t7d"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="zBT-BW-3fD">
+                                <rect key="frame" x="64" y="20" width="42" height="47"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="42" id="kuj-9P-SiG"/>
+                                    <constraint firstAttribute="height" constant="47" id="qzx-hd-sDm"/>
+                                </constraints>
+                                <color key="tintColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <state key="normal" image="pause.fill" catalog="system">
+                                    <color key="titleColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                </state>
+                                <connections>
+                                    <action selector="pause" destination="BV1-FR-VrT" eventType="touchUpInside" id="QDy-3D-ai0"/>
                                 </connections>
                             </button>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Qo8-sU-vei">
@@ -278,26 +334,31 @@
                         <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                         <constraints>
                             <constraint firstAttribute="trailing" secondItem="Qo8-sU-vei" secondAttribute="trailing" id="IcC-cB-XhF"/>
+                            <constraint firstItem="zBT-BW-3fD" firstAttribute="top" secondItem="4qk-I5-YsI" secondAttribute="top" constant="20" id="RcZ-ED-Reo"/>
+                            <constraint firstItem="wsh-dA-ZaI" firstAttribute="top" secondItem="qbq-dG-xKQ" secondAttribute="bottom" constant="7" id="aDX-86-QM0"/>
+                            <constraint firstItem="wsh-dA-ZaI" firstAttribute="centerY" secondItem="3se-qz-xqx" secondAttribute="centerY" id="crp-Wl-qAO"/>
                             <constraint firstItem="Qo8-sU-vei" firstAttribute="leading" secondItem="3se-qz-xqx" secondAttribute="leading" id="ejn-O5-NbJ"/>
                             <constraint firstItem="qbq-dG-xKQ" firstAttribute="centerX" secondItem="3se-qz-xqx" secondAttribute="centerX" id="eox-nb-pAB"/>
-                            <constraint firstItem="qbq-dG-xKQ" firstAttribute="top" secondItem="4qk-I5-YsI" secondAttribute="top" constant="100" id="iwm-4i-veu"/>
-                            <constraint firstItem="4qk-I5-YsI" firstAttribute="bottom" secondItem="hwM-Zy-NU4" secondAttribute="bottom" constant="100" id="nGr-eF-dGf"/>
+                            <constraint firstItem="hwM-Zy-NU4" firstAttribute="top" secondItem="wsh-dA-ZaI" secondAttribute="bottom" constant="7" id="lmT-4E-ICa"/>
                             <constraint firstAttribute="bottom" secondItem="Qo8-sU-vei" secondAttribute="bottom" id="pVA-Eb-x7h"/>
-                            <constraint firstItem="hwM-Zy-NU4" firstAttribute="centerY" secondItem="3se-qz-xqx" secondAttribute="centerY" id="rf3-r7-DE4"/>
+                            <constraint firstItem="zBT-BW-3fD" firstAttribute="leading" secondItem="4qk-I5-YsI" secondAttribute="leading" constant="20" id="riR-06-HxM"/>
+                            <constraint firstItem="wsh-dA-ZaI" firstAttribute="centerX" secondItem="3se-qz-xqx" secondAttribute="centerX" id="try-Cn-cNQ"/>
                             <constraint firstItem="hwM-Zy-NU4" firstAttribute="centerX" secondItem="3se-qz-xqx" secondAttribute="centerX" id="wVW-CW-4Sy"/>
                             <constraint firstItem="Qo8-sU-vei" firstAttribute="top" secondItem="4qk-I5-YsI" secondAttribute="top" id="wmN-zO-vsc"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="4qk-I5-YsI"/>
                     </view>
                     <connections>
+                        <outlet property="continueButton" destination="wsh-dA-ZaI" id="VBV-Uj-p0Y"/>
                         <outlet property="loadingView" destination="Qo8-sU-vei" id="SgM-bx-ceH"/>
+                        <outlet property="pauseButton" destination="zBT-BW-3fD" id="C0U-sb-GQI"/>
                         <outlet property="reloadButton" destination="qbq-dG-xKQ" id="EYT-Zc-Lb9"/>
                         <outlet property="toMainMenuButton" destination="hwM-Zy-NU4" id="MS1-5p-jno"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="SZV-WD-TEh" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="809" y="-1"/>
+            <point key="canvasLocation" x="808.92857142857144" y="-1.4492753623188408"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="i4X-Fb-cUH">
@@ -318,7 +379,10 @@
         </scene>
     </scenes>
     <resources>
-        <image name="bg1.png" width="1537" height="1536"/>
-        <image name="bg2.png" width="1536" height="1536"/>
+        <image name="bg1.png" width="619" height="620"/>
+        <image name="bg2.png" width="201" height="198"/>
+        <image name="bg200points.png" width="215" height="209"/>
+        <image name="bg3500points.png" width="215" height="211"/>
+        <image name="pause.fill" catalog="system" width="58" height="64"/>
     </resources>
 </document>

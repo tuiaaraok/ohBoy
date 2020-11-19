@@ -22,6 +22,10 @@ extension GameScene {
             bgSkyTexture = SKTexture(imageNamed: "sky_2.png")
             bgMountainTexture = SKTexture(imageNamed: "mountain_2.png")
             bgGroundTexture = SKTexture(imageNamed: "ground_2.png")
+        case 3:
+            bgSkyTexture = SKTexture(imageNamed: "sky_3.png")
+            bgMountainTexture = SKTexture(imageNamed: "mountain_3.png")
+            bgGroundTexture = SKTexture(imageNamed: "ground_3.png")
         default:
             break
         }
@@ -38,13 +42,13 @@ extension GameScene {
         let moveMountainBgForever = SKAction.repeatForever(SKAction.sequence([moveMountain, replaceMountainBg]))
         let moveGroundBgForever = SKAction.repeatForever(SKAction.sequence([moveGround, replaceGroundBg]))
         
-        bgSky.zPosition = -3
-        bgMountain.zPosition = -2
-        bgGround.zPosition = -1
         
         createBgForever(moveBgForever: moveSkyBgForever, bgTexture: bgSkyTexture, bgObject: skyBgObject, bg: &bgSky)
         createBgForever(moveBgForever: moveMountainBgForever, bgTexture: bgMountainTexture, bgObject: mountainBgObject, bg: &bgMountain)
         createBgForever(moveBgForever: moveGroundBgForever, bgTexture: bgGroundTexture, bgObject: groundBgObject, bg: &bgGround)
+        bgSky.zPosition = -3
+        bgMountain.zPosition = -2
+        bgGround.zPosition = -1
     }
     
     func createBgForever(moveBgForever: SKAction, bgTexture: SKTexture, bgObject: SKNode, bg: inout SKSpriteNode) {

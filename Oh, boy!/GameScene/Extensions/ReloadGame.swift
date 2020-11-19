@@ -41,6 +41,7 @@ extension GameScene {
         createGround()
         createSky()
         createHero()
+        createShoeEmitter()
         
         gameViewController.toMainMenuButton.isHidden = true
         

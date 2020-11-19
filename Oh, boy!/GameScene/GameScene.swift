@@ -43,6 +43,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     
     // Emitters node
     var shieldEmitter = SKEmitterNode()
+    var leftShoeEmitter = SKEmitterNode()
+    var rightShoeEmitter = SKEmitterNode()
     
     // Sprite Nodes
     var bgSky = SKSpriteNode()
@@ -74,6 +76,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     var groundObject = SKNode()
     var skyObject = SKNode()
     var heroObject = SKNode()
+    var shoeEmitterObject = SKNode()
     var coinObject = SKNode()
     var bigCoinObject = SKNode()
     var enemyObject = SKNode()
@@ -90,7 +93,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     var shieldGroup: UInt32 = 0x1 << 6
     
     // Textures array for animateWithTexture
-    var heroJumpTexturesArray = [SKTexture]()
+    var heroFlyTexturesArray = [SKTexture]()
     var heroRunTexturesArray = [SKTexture]()
     var coinTexturesArray = [SKTexture]()
     var wormTexturesArray = [SKTexture]()
@@ -109,6 +112,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     var timerAddUfo = Timer()
     
     // Sounds
+    var heroFlyPreload = SKAction()
     var pickCoinPreload = SKAction()
     var wormPreload = SKAction()
     var deadPreload = SKAction()
@@ -153,6 +157,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         
         // Emitters
         shieldEmitter = SKEmitterNode(fileNamed: "engine.sks")!
+        leftShoeEmitter = SKEmitterNode(fileNamed: "shoeSpark.sks")!
+        rightShoeEmitter = SKEmitterNode(fileNamed: "shoeSpark.sks")!
         
         self.physicsWorld.contactDelegate = self
         
@@ -171,7 +177,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             createGame()
         }
         
-        pickCoinPreload = SKAction.playSoundFileNamed("", waitForCompletion: false)
+        heroFlyPreload = SKAction.playSoundFileNamed("fly.mp3", waitForCompletion: false)
+        pickCoinPreload = SKAction.playSoundFileNamed("pickCoin.mp3", waitForCompletion: false)
         wormPreload = SKAction.playSoundFileNamed("worm.mp3", waitForCompletion: false)
         deadPreload = SKAction.playSoundFileNamed("", waitForCompletion: false)
         skullPreload = SKAction.playSoundFileNamed("", waitForCompletion: false)
@@ -191,6 +198,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         self.addChild(skyObject)
         self.addChild(groundObject)
         self.addChild(heroObject)
+        self.addChild(shoeEmitterObject)
         self.addChild(coinObject)
         self.addChild(bigCoinObject)
         self.addChild(enemyObject)
@@ -206,6 +214,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         
         DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(2)) {
             self.createHero()
+            self.createShoeEmitter()
             self.addTimer()
         }
         showTapToPlay()
@@ -263,6 +272,15 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     
     func createHero() {
         addHero(heroNode: hero, atPosition: CGPoint(x: self.size.width / 4, y: 0 + jumpHeroTex.size().height))
+    }
+    
+    func createShoeEmitter() {
+        leftShoeEmitter = SKEmitterNode(fileNamed: "shoeSpark.sks")!
+        rightShoeEmitter = SKEmitterNode(fileNamed: "shoeSpark.sks")!
+        shoeEmitterObject.zPosition = 1
+        shoeEmitterObject.addChild(leftShoeEmitter)
+        shoeEmitterObject.addChild(rightShoeEmitter)
+        
     }
     
     @objc func addCoin() {
@@ -358,7 +376,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     func deathAction() {
         mountainBgObject.isPaused = true
         groundBgObject.isPaused = true
-        hero.texture = SKTexture(imageNamed: "fail3.png")
+        hero.texture = SKTexture(imageNamed: "fail.png")
         scene?.speed = 0
         hero.speed = 0
         worm.removeAllChildren()
@@ -463,6 +481,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     }
     
     override func didFinishUpdate() {
+        leftShoeEmitter.position = hero.position - CGPoint(x: 23, y: 60)
+        rightShoeEmitter.position = hero.position - CGPoint(x: -8, y: 53)
         shieldEmitter.position = hero.position + CGPoint(x: 0, y: 0)
     }
 }
