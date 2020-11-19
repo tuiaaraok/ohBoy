@@ -35,7 +35,7 @@ class GameViewController: UIViewController {
         scene.scaleMode = .aspectFill
         scene.background = selectedBg
         scene.level = selectedLevel
-        scene.gameViewControllerBridge = self
+        scene.gameViewController = self
         
         textureAtlas.preload {
             
@@ -49,7 +49,7 @@ class GameViewController: UIViewController {
     @IBAction func reloadGameButtonPressed(_ sender: UIButton) {
         SKTAudio.sharedInstance().playSoundEffect(filename: "")
         scene.reloadGame()
-        scene.gameViewControllerBridge = self
+        scene.gameViewController = self
         reloadButton.isHidden = true
     }
     

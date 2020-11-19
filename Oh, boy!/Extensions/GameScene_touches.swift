@@ -22,8 +22,8 @@ extension GameScene {
                hero.physicsBody?.velocity = CGVector.zero
                hero.physicsBody?.applyImpulse(CGVector(dx: 0, dy: 150))
                                  
-               heroflyTexturesArray = [SKTexture(imageNamed: "jump_up.png")]
-               let heroFlyAnimation = SKAction.animate(with: heroflyTexturesArray, timePerFrame: 0.02)
+               heroJumpTexturesArray = [SKTexture(imageNamed: "jump_up.png")]
+               let heroFlyAnimation = SKAction.animate(with: heroJumpTexturesArray, timePerFrame: 0.02)
                let flyHero = SKAction.repeatForever(heroFlyAnimation)
                hero.run(flyHero)
            }

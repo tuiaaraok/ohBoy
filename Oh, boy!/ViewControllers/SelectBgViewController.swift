@@ -16,7 +16,7 @@ class SelectBgViewController: UIViewController {
     @IBOutlet weak var totalPoint: UILabel!
     @IBOutlet weak var bg1: UIButton!
     @IBOutlet weak var bg2: UIButton!
-    @IBOutlet weak var bgButtonLabel: UILabel!
+
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
@@ -30,7 +30,6 @@ class SelectBgViewController: UIViewController {
         if Model.sharedInstance.totalscore > Model.sharedInstance.level2UnlockValue {
             let image = UIImage(named: "bg2.png")
             bg2.setBackgroundImage(image, for: .normal)
-            bgButtonLabel.isHidden = true
         }
     }
     

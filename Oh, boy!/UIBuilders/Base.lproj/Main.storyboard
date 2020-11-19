@@ -6,6 +6,11 @@
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
+    <customFonts key="customFonts">
+        <array key="Astounder.otf">
+            <string>AstounderSquaredBB-BoldItalic</string>
+        </array>
+    </customFonts>
     <scenes>
         <!--Level View Controller-->
         <scene sceneID="hHZ-kL-xSO">
@@ -15,7 +20,7 @@
                         <rect key="frame" x="0.0" y="0.0" width="896" height="414"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="mountainBg.png" translatesAutoresizingMaskIntoConstraints="NO" id="QDH-EM-AY5">
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="bg2.png" translatesAutoresizingMaskIntoConstraints="NO" id="QDH-EM-AY5">
                                 <rect key="frame" x="0.0" y="0.0" width="896" height="414"/>
                             </imageView>
                             <button opaque="NO" tag="1" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="17t-tk-7L3">
@@ -24,7 +29,7 @@
                                     <constraint firstAttribute="height" constant="103" id="5Ej-kz-1ko"/>
                                     <constraint firstAttribute="width" constant="190" id="cbq-zc-Shw"/>
                                 </constraints>
-                                <fontDescription key="fontDescription" name="MarkerFelt-Thin" family="Marker Felt" pointSize="45"/>
+                                <fontDescription key="fontDescription" name="AstounderSquaredBB-BoldItalic" family="Astounder Squared BB" pointSize="45"/>
                                 <state key="normal" title="Medium">
                                     <color key="titleColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
@@ -38,7 +43,7 @@
                                     <constraint firstAttribute="width" constant="190" id="Odz-QL-PtM"/>
                                     <constraint firstAttribute="height" constant="103" id="VdR-NJ-ERw"/>
                                 </constraints>
-                                <fontDescription key="fontDescription" name="MarkerFelt-Thin" family="Marker Felt" pointSize="45"/>
+                                <fontDescription key="fontDescription" name="AstounderSquaredBB-BoldItalic" family="Astounder Squared BB" pointSize="45"/>
                                 <state key="normal" title="Hard">
                                     <color key="titleColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
@@ -52,7 +57,7 @@
                                     <constraint firstAttribute="height" constant="103" id="Cg6-9z-dbK"/>
                                     <constraint firstAttribute="width" constant="190" id="qto-6X-nqz"/>
                                 </constraints>
-                                <fontDescription key="fontDescription" name="MarkerFelt-Thin" family="Marker Felt" pointSize="45"/>
+                                <fontDescription key="fontDescription" name="AstounderSquaredBB-BoldItalic" family="Astounder Squared BB" pointSize="45"/>
                                 <state key="normal" title="Easy">
                                     <color key="titleColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
@@ -89,13 +94,16 @@
                         <rect key="frame" x="0.0" y="0.0" width="896" height="414"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="bg2.png" translatesAutoresizingMaskIntoConstraints="NO" id="UEf-BZ-9hE">
+                                <rect key="frame" x="0.0" y="0.0" width="896" height="414"/>
+                            </imageView>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="RYc-Tj-KtG">
                                 <rect key="frame" x="322.5" y="173.5" width="251" height="67"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="251" id="ATR-gM-j3e"/>
                                     <constraint firstAttribute="height" constant="67" id="xE4-SI-TMW"/>
                                 </constraints>
-                                <fontDescription key="fontDescription" name="MarkerFelt-Thin" family="Marker Felt" pointSize="50"/>
+                                <fontDescription key="fontDescription" name="AstounderSquaredBB-BoldItalic" family="Astounder Squared BB" pointSize="50"/>
                                 <state key="normal" title="Start">
                                     <color key="titleColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
@@ -106,6 +114,10 @@
                         </subviews>
                         <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                         <constraints>
+                            <constraint firstAttribute="trailing" secondItem="UEf-BZ-9hE" secondAttribute="trailing" id="Yxv-D8-T85"/>
+                            <constraint firstItem="UEf-BZ-9hE" firstAttribute="leading" secondItem="Pf7-yG-cWL" secondAttribute="leading" id="bsz-01-zkU"/>
+                            <constraint firstItem="UEf-BZ-9hE" firstAttribute="top" secondItem="oSl-n9-jrz" secondAttribute="top" id="c2P-fO-FjW"/>
+                            <constraint firstAttribute="bottom" secondItem="UEf-BZ-9hE" secondAttribute="bottom" id="ccT-SO-8D8"/>
                             <constraint firstItem="RYc-Tj-KtG" firstAttribute="centerY" secondItem="Pf7-yG-cWL" secondAttribute="centerY" id="hNq-wS-EGD"/>
                             <constraint firstItem="RYc-Tj-KtG" firstAttribute="centerX" secondItem="Pf7-yG-cWL" secondAttribute="centerX" id="oew-CS-buX"/>
                         </constraints>
@@ -115,7 +127,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Tzq-P0-g9m" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-642" y="-1"/>
+            <point key="canvasLocation" x="-642.1875" y="-1.4492753623188408"/>
         </scene>
         <!--Select Bg View Controller-->
         <scene sceneID="1O4-QA-mOz">
@@ -125,7 +137,7 @@
                         <rect key="frame" x="0.0" y="0.0" width="896" height="414"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="sky" translatesAutoresizingMaskIntoConstraints="NO" id="hDX-5c-BMc">
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="bg2.png" translatesAutoresizingMaskIntoConstraints="NO" id="hDX-5c-BMc">
                                 <rect key="frame" x="0.0" y="0.0" width="896" height="414"/>
                             </imageView>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="rfW-cP-aen">
@@ -150,7 +162,7 @@
                                     <constraint firstAttribute="width" constant="189" id="65S-JM-OXU"/>
                                     <constraint firstAttribute="height" constant="33" id="dDs-Ay-BYA"/>
                                 </constraints>
-                                <fontDescription key="fontDescription" name="MarkerFelt-Thin" family="Marker Felt" pointSize="30"/>
+                                <fontDescription key="fontDescription" name="AstounderSquaredBB-BoldItalic" family="Astounder Squared BB" pointSize="30"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
@@ -160,14 +172,14 @@
                                     <constraint firstAttribute="height" constant="28" id="3MI-7q-PD3"/>
                                     <constraint firstAttribute="width" constant="179" id="eZW-VV-dds"/>
                                 </constraints>
-                                <fontDescription key="fontDescription" name="MarkerFelt-Thin" family="Marker Felt" pointSize="25"/>
+                                <fontDescription key="fontDescription" name="AstounderSquaredBB-BoldItalic" family="Astounder Squared BB" pointSize="25"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="H6G-7l-ThO">
-                                <rect key="frame" x="62" y="21" width="46" height="40"/>
+                                <rect key="frame" x="63" y="22" width="46" height="38"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <fontDescription key="fontDescription" name="MarkerFelt-Thin" family="Marker Felt" pointSize="25"/>
+                                <fontDescription key="fontDescription" name="AstounderSquaredBB-BoldItalic" family="Astounder Squared BB" pointSize="25"/>
                                 <state key="normal" title="Back">
                                     <color key="titleColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
@@ -175,13 +187,6 @@
                                     <action selector="backButtonPressed:" destination="gLL-h3-Z6r" eventType="touchUpInside" id="UZb-gQ-1WN"/>
                                 </connections>
                             </button>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="200 points" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="NTy-qU-E3f">
-                                <rect key="frame" x="301" y="198" width="77" height="19"/>
-                                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                                <fontDescription key="fontDescription" name="MarkerFelt-Thin" family="Marker Felt" pointSize="17"/>
-                                <nil key="textColor"/>
-                                <nil key="highlightedColor"/>
-                            </label>
                         </subviews>
                         <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                         <constraints>
@@ -199,7 +204,6 @@
                     <connections>
                         <outlet property="bg1" destination="rfW-cP-aen" id="hZn-7B-hlX"/>
                         <outlet property="bg2" destination="2nW-CT-V1n" id="Ose-AW-iQx"/>
-                        <outlet property="bgButtonLabel" destination="NTy-qU-E3f" id="oXM-l2-5KN"/>
                         <outlet property="totalPoint" destination="B8m-Sa-4sj" id="4gA-hF-0SL"/>
                     </connections>
                 </viewController>
@@ -216,12 +220,12 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="qbq-dG-xKQ">
-                                <rect key="frame" x="273" y="130" width="350" height="77"/>
+                                <rect key="frame" x="273" y="100" width="350" height="77"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="77" id="AeM-37-AxD"/>
                                     <constraint firstAttribute="width" constant="350" id="GQt-0F-EuQ"/>
                                 </constraints>
-                                <fontDescription key="fontDescription" name="MarkerFelt-Thin" family="Marker Felt" pointSize="50"/>
+                                <fontDescription key="fontDescription" name="AstounderSquaredBB-BoldItalic" family="Astounder Squared BB" pointSize="50"/>
                                 <state key="normal" title="Restart">
                                     <color key="titleColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
@@ -230,12 +234,12 @@
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="hwM-Zy-NU4">
-                                <rect key="frame" x="332.5" y="173.5" width="231" height="67"/>
+                                <rect key="frame" x="332.5" y="226" width="231" height="67"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="67" id="0dn-6t-V0k"/>
                                     <constraint firstAttribute="width" constant="231" id="Wo9-L9-DJB"/>
                                 </constraints>
-                                <fontDescription key="fontDescription" name="MarkerFelt-Thin" family="Marker Felt" pointSize="50"/>
+                                <fontDescription key="fontDescription" name="AstounderSquaredBB-BoldItalic" family="Astounder Squared BB" pointSize="50"/>
                                 <state key="normal" title="Main menu">
                                     <color key="titleColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
@@ -246,16 +250,16 @@
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Qo8-sU-vei">
                                 <rect key="frame" x="0.0" y="0.0" width="896" height="414"/>
                                 <subviews>
-                                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="sky" translatesAutoresizingMaskIntoConstraints="NO" id="OiG-Q4-7Bx">
+                                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="bg2.png" translatesAutoresizingMaskIntoConstraints="NO" id="OiG-Q4-7Bx">
                                         <rect key="frame" x="0.0" y="0.0" width="896" height="414"/>
                                     </imageView>
-                                    <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Loading..." textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="S3Y-PZ-TfX">
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Loading..." textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="S3Y-PZ-TfX">
                                         <rect key="frame" x="296" y="143" width="304" height="128"/>
                                         <constraints>
                                             <constraint firstAttribute="width" constant="304" id="GGJ-az-Un4"/>
                                             <constraint firstAttribute="height" constant="128" id="IQa-XK-MzS"/>
                                         </constraints>
-                                        <fontDescription key="fontDescription" name="MarkerFelt-Thin" family="Marker Felt" pointSize="50"/>
+                                        <fontDescription key="fontDescription" name="AstounderSquaredBB-BoldItalic" family="Astounder Squared BB" pointSize="50"/>
                                         <nil key="textColor"/>
                                         <nil key="highlightedColor"/>
                                     </label>
@@ -276,7 +280,8 @@
                             <constraint firstAttribute="trailing" secondItem="Qo8-sU-vei" secondAttribute="trailing" id="IcC-cB-XhF"/>
                             <constraint firstItem="Qo8-sU-vei" firstAttribute="leading" secondItem="3se-qz-xqx" secondAttribute="leading" id="ejn-O5-NbJ"/>
                             <constraint firstItem="qbq-dG-xKQ" firstAttribute="centerX" secondItem="3se-qz-xqx" secondAttribute="centerX" id="eox-nb-pAB"/>
-                            <constraint firstItem="qbq-dG-xKQ" firstAttribute="top" secondItem="4qk-I5-YsI" secondAttribute="top" constant="130" id="iwm-4i-veu"/>
+                            <constraint firstItem="qbq-dG-xKQ" firstAttribute="top" secondItem="4qk-I5-YsI" secondAttribute="top" constant="100" id="iwm-4i-veu"/>
+                            <constraint firstItem="4qk-I5-YsI" firstAttribute="bottom" secondItem="hwM-Zy-NU4" secondAttribute="bottom" constant="100" id="nGr-eF-dGf"/>
                             <constraint firstAttribute="bottom" secondItem="Qo8-sU-vei" secondAttribute="bottom" id="pVA-Eb-x7h"/>
                             <constraint firstItem="hwM-Zy-NU4" firstAttribute="centerY" secondItem="3se-qz-xqx" secondAttribute="centerY" id="rf3-r7-DE4"/>
                             <constraint firstItem="hwM-Zy-NU4" firstAttribute="centerX" secondItem="3se-qz-xqx" secondAttribute="centerX" id="wVW-CW-4Sy"/>
@@ -313,9 +318,7 @@
         </scene>
     </scenes>
     <resources>
-        <image name="bg1.png" width="3072" height="1536"/>
-        <image name="bg2.png" width="3072" height="1536"/>
-        <image name="mountainBg.png" width="3072" height="1536"/>
-        <image name="sky" width="1536" height="768"/>
+        <image name="bg1.png" width="1537" height="1536"/>
+        <image name="bg2.png" width="1536" height="1536"/>
     </resources>
 </document>

@@ -36,7 +36,7 @@ extension GameScene {
                 hero.physicsBody?.allowsRotation = false
 
                 timerInvalidate()
-                                 
+                
                 heroDeathTexturesArray = [SKTexture(imageNamed: "fail0.png"),
                                           SKTexture(imageNamed: "fail.png")]
                 hero.size.height = 85
@@ -54,8 +54,8 @@ extension GameScene {
                                                
                     DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
                         self.showHighScoreText()
-                        self.gameViewControllerBridge.reloadButton.isHidden = false
-                        self.gameViewControllerBridge.toMainMenuButton.isHidden = false
+                        self.gameViewController.reloadButton.isHidden = false
+                        self.gameViewController.toMainMenuButton.isHidden = false
                         self.stageLabel.isHidden = true
                         
                         if Model.sharedInstance.score > Model.sharedInstance.highScore {
