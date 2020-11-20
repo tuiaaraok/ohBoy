@@ -76,6 +76,8 @@ class GameViewController: UIViewController {
         
         SKTAudio.sharedInstance().playSoundEffect(filename: "push.mp3")
         scene.isPaused = true
+        scene.timerInvalidate()
+        scene.tapToPlayLabel.isHidden = true
         reloadButton.isHidden = false
         toMainMenuButton.isHidden = false
         continueButton.isHidden = false
@@ -90,6 +92,7 @@ class GameViewController: UIViewController {
         pauseButton.isHidden = false
         continueButton.isHidden = true
         scene.isPaused = false
+        scene.addTimer()
     }
 
     override var shouldAutorotate: Bool {

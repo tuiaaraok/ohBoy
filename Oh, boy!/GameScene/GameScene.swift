@@ -20,6 +20,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     var gameOver = 0
     var level: Level!
     var background: Background!
+    let screenSize = UIScreen.main.bounds
     
     // Texture
     var bgSkyTexture: SKTexture!
@@ -180,12 +181,12 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         heroFlyPreload = SKAction.playSoundFileNamed("fly.mp3", waitForCompletion: false)
         pickCoinPreload = SKAction.playSoundFileNamed("pickCoin.mp3", waitForCompletion: false)
         wormPreload = SKAction.playSoundFileNamed("worm.mp3", waitForCompletion: false)
-        deadPreload = SKAction.playSoundFileNamed("", waitForCompletion: false)
-        skullPreload = SKAction.playSoundFileNamed("", waitForCompletion: false)
-        slimeMonsterPreload = SKAction.playSoundFileNamed("", waitForCompletion: false)
-        greenMonsterPreload = SKAction.playSoundFileNamed("", waitForCompletion: false)
-        ufoPreload = SKAction.playSoundFileNamed("", waitForCompletion: false)
-        shieldOnPreload = SKAction.playSoundFileNamed("", waitForCompletion: false)
+        deadPreload = SKAction.playSoundFileNamed("death.mp3", waitForCompletion: false)
+        skullPreload = SKAction.playSoundFileNamed("skull.mp3", waitForCompletion: false)
+        slimeMonsterPreload = SKAction.playSoundFileNamed("slime.mp3", waitForCompletion: false)
+        greenMonsterPreload = SKAction.playSoundFileNamed("greenMonster.mp3", waitForCompletion: false)
+        ufoPreload = SKAction.playSoundFileNamed("ufo.mp3", waitForCompletion: false)
+        shieldOnPreload = SKAction.playSoundFileNamed("shiled.mp3", waitForCompletion: false)
         
     }
     
@@ -292,12 +293,15 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         coin.run(coinRepeat)
                
         let movementAmount = arc4random() % UInt32(self.frame.size.height / 2)
-        let pipeOffset = CGFloat(movementAmount) - self.frame.size.height / 4
+        var pipeOffset = CGFloat(movementAmount) - self.frame.size.height / 4
+        if pipeOffset < 0 {
+            pipeOffset *= -1
+        }
         coin.size.width = 40
         coin.size.height = 40
         coin.physicsBody = SKPhysicsBody(rectangleOf: CGSize(width: coin.size.width - 20, height: coin.size.height - 20))
         coin.physicsBody?.restitution = 0
-        coin.position = CGPoint(x: self.size.width + 50, y: 0 + coinTexture.size().height + 130 + pipeOffset)
+        coin.position = CGPoint(x: self.size.width + 50, y: 0 + coinTexture.size().height + 150 + pipeOffset)
                
         let moveCoin = SKAction.moveBy(x: -self.frame.size.width * 2, y: 0, duration: 5)
         let removeAction = SKAction.removeFromParent()
@@ -318,7 +322,11 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         bigCoin.run(bigCoinRepeat)
         
         let movementAmount = arc4random() % UInt32(self.frame.size.height / 2)
-        let pipeOffset = CGFloat(movementAmount) - self.frame.size.height / 4
+        var pipeOffset = CGFloat(movementAmount) - self.frame.size.height / 4
+        if pipeOffset < 0 {
+            pipeOffset *= -1
+        }
+        
         bigCoin.size.width = 40
         bigCoin.size.height = 40
         bigCoin.physicsBody = SKPhysicsBody(rectangleOf: CGSize(width: bigCoin.size.width - 10, height: bigCoin.size.height - 10))
@@ -329,7 +337,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         let removeAction = SKAction.removeFromParent()
         let coinMoveBgForever = SKAction.repeatForever(SKAction.sequence([moveCoin, removeAction]))
         bigCoin.run(coinMoveBgForever)
-        bigCoin.setScale(1.3)
+        bigCoin.setScale(1.5)
         bigCoin.physicsBody?.isDynamic = false
         bigCoin.physicsBody?.categoryBitMask = bigCoinGroup
         bigCoin.zPosition = 1
@@ -343,14 +351,10 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     
     @objc func addShieldBottle() {
         shieldBottle = SKSpriteNode(texture: shieldBottleTexture)
-        
-        let movementAmount = arc4random() % UInt32(self.frame.size.height / 2)
-        let pipeOffset = CGFloat(movementAmount) - self.frame.size.height / 4
-        
         shieldBottle.size.width = 50
         shieldBottle.size.height = 65
         
-        shieldBottle.position = CGPoint(x: self.size.width + 50, y: 0 + shieldBottleTexture.size().height - pipeOffset)
+        shieldBottle.position = CGPoint(x: self.size.width + 50, y: 0 + shieldBottleTexture.size().height)
         shieldBottle.physicsBody = SKPhysicsBody(rectangleOf: CGSize(width: shieldBottle.size.width - 20, height: shieldBottle.size.height - 20))
         shieldBottle.physicsBody?.restitution = 0
         
@@ -450,34 +454,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         stageLabel.text = "Stage 1"
         stageLabel.zPosition = 1
         self.addChild(stageLabel)
-    }
-    
-    func levelUp() {
-        if 1 <= Model.sharedInstance.score && Model.sharedInstance.score < 20 {
-            stageLabel.text = "Stage 1"
-            coinObject.speed = 1.05
-            bigCoinObject.speed = 1.1
-            enemyObject.speed = 1.05
-            self.speed = 1.05
-        } else if 20 <= Model.sharedInstance.score && Model.sharedInstance.score < 39 {
-            stageLabel.text = "Stage 2"
-            coinObject.speed = 1.22
-            bigCoinObject.speed = 1.32
-            enemyObject.speed = -1.22
-            self.speed = 1.22
-        } else if 40 <= Model.sharedInstance.score && Model.sharedInstance.score < 59 {
-            stageLabel.text = "Stage 3"
-            coinObject.speed = 1.3
-            bigCoinObject.speed = 1.42
-            enemyObject.speed = 1.3
-            self.speed = 1.22
-        } else if 60 <= Model.sharedInstance.score && Model.sharedInstance.score < 100 {
-            stageLabel.text = "Stage 4"
-            coinObject.speed = 1.4
-            bigCoinObject.speed = 1.5
-            enemyObject.speed = 1.5
-            self.speed = 1.22
-        }
     }
     
     override func didFinishUpdate() {

@@ -30,7 +30,8 @@ extension GameScene {
                 rightShoeEmitter.isHidden = true
                 
                 if Model.sharedInstance.sound {
-//                run(deadPreload)
+                    run(deadPreload)
+                    death = false
                 }
                 
                 Model.sharedInstance.totalscore = Model.sharedInstance.totalscore + Model.sharedInstance.score
@@ -50,35 +51,30 @@ extension GameScene {
                 
                 showHighScore()
                  gameOver = 1
-                     
-                if death {
-                    deathAction()
+
+                deathAction()
                                                
-                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-                        self.showHighScoreText()
-                        self.gameViewController.reloadButton.isHidden = false
-                        self.gameViewController.toMainMenuButton.isHidden = false
-                        self.gameViewController.pauseButton.isHidden = true
-                        self.stageLabel.isHidden = true
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                    self.showHighScoreText()
+                    self.gameViewController.reloadButton.isHidden = false
+                    self.gameViewController.toMainMenuButton.isHidden = false
+                    self.gameViewController.pauseButton.isHidden = true
+                    self.stageLabel.isHidden = true
                         
-                        if Model.sharedInstance.score > Model.sharedInstance.highScore {
-                            Model.sharedInstance.highScore = Model.sharedInstance.score
-                        }
-                        
-                        self.highScoreLabel.isHidden = false
-                        self.highScoreTextLabel.isHidden = false
-                        self.highScoreLabel.text = "\( Model.sharedInstance.highScore)"
+                    if Model.sharedInstance.score > Model.sharedInstance.highScore {
+                        Model.sharedInstance.highScore = Model.sharedInstance.score
                     }
+                        
+                    self.highScoreLabel.isHidden = false
+                    self.highScoreTextLabel.isHidden = false
+                    self.highScoreLabel.text = "\( Model.sharedInstance.highScore)"
                 }
                 SKTAudio.sharedInstance().pauseBackgroundMusic()
             } else {
                 death = false
                 objectNode?.removeFromParent()
                 shieldObject.removeAllChildren()
-                shieldBool = false
-                if Model.sharedInstance.sound {
-//                    run(shieldOffPreload)
-                }
+                shieldBool = false 
             }
          }
     

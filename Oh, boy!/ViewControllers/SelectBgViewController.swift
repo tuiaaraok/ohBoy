@@ -38,13 +38,11 @@ class SelectBgViewController: UIViewController {
         if Model.sharedInstance.totalscore > Model.sharedInstance.level2UnlockValue {
             let image = UIImage(named: "bg2.png")
             bg2.setBackgroundImage(image, for: .normal)
-            bg2.setTitle("", for: .normal)
         }
         
         if Model.sharedInstance.totalscore > Model.sharedInstance.level3UnlockValue {
             let image = UIImage(named: "bg3.png")
             bg3.setBackgroundImage(image, for: .normal)
-            bg3.setTitle("", for: .normal)
         }
     }
     

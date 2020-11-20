@@ -94,17 +94,18 @@
                         <rect key="frame" x="0.0" y="0.0" width="896" height="414"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="bg2.png" translatesAutoresizingMaskIntoConstraints="NO" id="UEf-BZ-9hE">
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="screen" translatesAutoresizingMaskIntoConstraints="NO" id="UEf-BZ-9hE">
                                 <rect key="frame" x="0.0" y="0.0" width="896" height="414"/>
+                                <color key="backgroundColor" red="0.46909656030000002" green="0.43163923440000002" blue="0.85727007769999997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                             </imageView>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="RYc-Tj-KtG">
-                                <rect key="frame" x="322.5" y="173.5" width="251" height="67"/>
+                                <rect key="frame" x="176" y="244" width="180" height="85"/>
                                 <constraints>
-                                    <constraint firstAttribute="width" constant="251" id="ATR-gM-j3e"/>
-                                    <constraint firstAttribute="height" constant="67" id="xE4-SI-TMW"/>
+                                    <constraint firstAttribute="width" constant="180" id="ATR-gM-j3e"/>
+                                    <constraint firstAttribute="height" constant="85" id="xE4-SI-TMW"/>
                                 </constraints>
                                 <fontDescription key="fontDescription" name="AstounderSquaredBB-BoldItalic" family="Astounder Squared BB" pointSize="50"/>
-                                <state key="normal" title="Start">
+                                <state key="normal" backgroundImage="StartButton">
                                     <color key="titleColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
                                 <connections>
@@ -114,12 +115,12 @@
                         </subviews>
                         <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                         <constraints>
+                            <constraint firstItem="RYc-Tj-KtG" firstAttribute="leading" secondItem="oSl-n9-jrz" secondAttribute="leading" constant="132" id="4Nc-UF-4vv"/>
+                            <constraint firstItem="oSl-n9-jrz" firstAttribute="bottom" secondItem="RYc-Tj-KtG" secondAttribute="bottom" constant="64" id="VRO-vy-YJ2"/>
                             <constraint firstAttribute="trailing" secondItem="UEf-BZ-9hE" secondAttribute="trailing" id="Yxv-D8-T85"/>
                             <constraint firstItem="UEf-BZ-9hE" firstAttribute="leading" secondItem="Pf7-yG-cWL" secondAttribute="leading" id="bsz-01-zkU"/>
                             <constraint firstItem="UEf-BZ-9hE" firstAttribute="top" secondItem="oSl-n9-jrz" secondAttribute="top" id="c2P-fO-FjW"/>
                             <constraint firstAttribute="bottom" secondItem="UEf-BZ-9hE" secondAttribute="bottom" id="ccT-SO-8D8"/>
-                            <constraint firstItem="RYc-Tj-KtG" firstAttribute="centerY" secondItem="Pf7-yG-cWL" secondAttribute="centerY" id="hNq-wS-EGD"/>
-                            <constraint firstItem="RYc-Tj-KtG" firstAttribute="centerX" secondItem="Pf7-yG-cWL" secondAttribute="centerX" id="oew-CS-buX"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="oSl-n9-jrz"/>
                     </view>
@@ -379,10 +380,12 @@
         </scene>
     </scenes>
     <resources>
+        <image name="StartButton" width="233" height="113"/>
         <image name="bg1.png" width="619" height="620"/>
         <image name="bg2.png" width="201" height="198"/>
-        <image name="bg200points.png" width="215" height="209"/>
+        <image name="bg200points.png" width="214" height="209"/>
         <image name="bg3500points.png" width="215" height="211"/>
         <image name="pause.fill" catalog="system" width="58" height="64"/>
+        <image name="screen" width="1536" height="768"/>
     </resources>
 </document>

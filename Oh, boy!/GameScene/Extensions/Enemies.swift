@@ -12,6 +12,7 @@ import SpriteKit
 extension GameScene {
     
     @objc func addWorm() {
+        
         if Model.sharedInstance.sound {
             run(wormPreload)
         }
@@ -42,15 +43,17 @@ extension GameScene {
         
         worm.setScale(scaleValue)
                     
-        let screenSize = UIScreen.main.bounds
         if screenSize.width > 800 {
-            worm.position = CGPoint(x: self.frame.size.width + 150, y: self.frame.size.height / 4 - self.frame.size.height / 24 + 30)
+            worm.position = CGPoint(x: self.frame.size.width + 150,
+                                    y: self.frame.size.height / 4 - self.frame.size.height / 24 + 50)
         } else {
-            worm.position = CGPoint(x: self.frame.size.width + 150, y: self.frame.size.height / 4 - 30)
+            worm.position = CGPoint(x: self.frame.size.width + 150,
+                                    y: self.frame.size.height / 4 - 30)
         }
                        
         let moveSpiderX = SKAction.moveTo(x: -self.frame.size.width / 4, duration: 4)
-        worm.physicsBody = SKPhysicsBody(rectangleOf: CGSize(width: worm.size.width - 40, height: worm.size.height - 30))
+        worm.physicsBody = SKPhysicsBody(rectangleOf: CGSize(width: worm.size.width - 40,
+                                                             height: worm.size.height - 30))
         worm.physicsBody?.categoryBitMask = objectGroup
         worm.physicsBody?.isDynamic = false
                        
@@ -95,10 +98,12 @@ extension GameScene {
         skull.speed  = 2.3
         let movementAmount = arc4random() % UInt32(self.frame.size.height / 2)
         let pipeOffset = CGFloat(movementAmount) - self.frame.size.height / 4
-        skull.position = CGPoint(x: self.frame.size.width + 150, y: 450 + pipeOffset)
+        skull.position = CGPoint(x: self.frame.size.width + 150,
+                                 y: 450 + pipeOffset)
                             
         let moveSkullX = SKAction.moveTo(x: -self.frame.size.width / 2, duration: 8)
-        skull.physicsBody = SKPhysicsBody(rectangleOf: CGSize(width: skull.size.width - 43, height: skull.size.height - 27))
+        skull.physicsBody = SKPhysicsBody(rectangleOf: CGSize(width: skull.size.width - 43,
+                                                              height: skull.size.height - 27))
         skull.physicsBody?.categoryBitMask = objectGroup
         skull.physicsBody?.isDynamic = false
                             
@@ -132,11 +137,12 @@ extension GameScene {
         slimeMonster.size.height = 130
         slimeMonster.speed  = 1
                        
-        let screenSize = UIScreen.main.bounds
         if screenSize.width > 800 {
-            slimeMonster.position = CGPoint(x: self.frame.size.width + 150, y: self.frame.size.height / 4 - self.frame.size.height / 24 + 30)
+            slimeMonster.position = CGPoint(x: self.frame.size.width + 150,
+                                            y: self.frame.size.height / 4 - self.frame.size.height / 24 + 80)
         } else {
-            slimeMonster.position = CGPoint(x: self.frame.size.width + 150, y: self.frame.size.height / 4 )
+            slimeMonster.position = CGPoint(x: self.frame.size.width + 150,
+                                            y: self.frame.size.height / 4 )
         }
                           
         let moveSlimeMonsterX = SKAction.moveTo(x: -self.frame.size.width / 3, duration: 3)
@@ -170,8 +176,8 @@ extension GameScene {
         let greenMonsterAnimationRepeat = SKAction.repeatForever(greenMonsterAnimation)
         greenMonster.run(greenMonsterAnimationRepeat)
            
-        greenMonster.size.width = 90
-        greenMonster.size.height = 62
+        greenMonster.size.width = 80
+        greenMonster.size.height = 65
         greenMonster.speed  = 1.5
            
         var scaleValue: CGFloat = 0.3
@@ -185,11 +191,12 @@ extension GameScene {
                   
         greenMonster.setScale(scaleValue)
                
-        let screenSize = UIScreen.main.bounds
         if screenSize.width > 800 {
-            greenMonster.position = CGPoint(x: self.frame.size.width + 150, y: self.frame.size.height / 4 - self.frame.size.height / 24 + 40)
+            greenMonster.position = CGPoint(x: self.frame.size.width + 150,
+                                            y: self.frame.size.height / 4 - self.frame.size.height / 24 + 40)
         } else {
-            greenMonster.position = CGPoint(x: self.frame.size.width + 150, y: self.frame.size.height / 4 - self.frame.size.height / 24)
+            greenMonster.position = CGPoint(x: self.frame.size.width + 150,
+                                            y: self.frame.size.height / 4 - self.frame.size.height / 24)
         }
                   
         let moveGreenMonsterX = SKAction.moveTo(x: -self.frame.size.width / 4, duration: 2)
@@ -221,7 +228,8 @@ extension GameScene {
         ufo.position = CGPoint(x: self.frame.size.width + 150, y: self.frame.size.height / 3 - self.frame.size.height / 24 + pipeOffset)
                      
         let moveUfoX = SKAction.moveTo(x: -self.frame.size.width / 2, duration: 3.7)
-        ufo.physicsBody = SKPhysicsBody(rectangleOf: CGSize(width: ufo.size.width - 43, height: ufo.size.height - 27))
+        ufo.physicsBody = SKPhysicsBody(rectangleOf: CGSize(width: ufo.size.width - 43,
+                                                            height: ufo.size.height - 27))
         ufo.physicsBody?.categoryBitMask = objectGroup
         ufo.physicsBody?.isDynamic = false
                      

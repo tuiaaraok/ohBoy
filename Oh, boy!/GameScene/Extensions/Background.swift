@@ -49,15 +49,18 @@ extension GameScene {
         bgSky.zPosition = -3
         bgMountain.zPosition = -2
         bgGround.zPosition = -1
+        view?.ignoresSiblingOrder = false
     }
     
     func createBgForever(moveBgForever: SKAction, bgTexture: SKTexture, bgObject: SKNode, bg: inout SKSpriteNode) {
+        
         for i in 0..<3 {
             bg = SKSpriteNode(texture: bgTexture)
-            bg.position = CGPoint(x: size.width / 4 + bgTexture.size().width * CGFloat(i), y: size.height / 2.0)
+            bg.position = CGPoint(x: size.width / 4 + bgTexture.size().width * CGFloat(i),
+                                  y: size.height / 2.0)
             let screenSize = UIScreen.main.bounds
             if screenSize.width > 800 {
-                bg.size.height = self.frame.height / 2
+                bg.size.height = self.frame.height / 1.6
             } else {
                 bg.size.height = self.frame.height / 1.35
             }

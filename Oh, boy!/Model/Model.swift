@@ -27,5 +27,5 @@ class Model {
     var totalscore = 0
        
     var level2UnlockValue = 200
-    var level3UnlockValue = 200
+    var level3UnlockValue = 500
 }
