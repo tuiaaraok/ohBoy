@@ -110,9 +110,9 @@
 		63678B112567E66200523908 /* SupportFiles */ = {
 			isa = PBXGroup;
 			children = (
+				63F1F9242563D2B200798218 /* Info.plist */,
 				63F1F91F2563D2B200798218 /* Assets.xcassets */,
 				63F1F9122563D2B100798218 /* AppDelegate.swift */,
-				63F1F9242563D2B200798218 /* Info.plist */,
 			);
 			name = SupportFiles;
 			sourceTree = "<group>";
