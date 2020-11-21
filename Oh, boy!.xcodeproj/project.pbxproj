@@ -8,7 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		63678B0E2567D1F900523908 /* bg200points.png in Resources */ = {isa = PBXBuildFile; fileRef = 63678B0D2567D1F900523908 /* bg200points.png */; };
-		63678B102567D9B700523908 /* Level.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63678B0F2567D9B700523908 /* Level.swift */; };
+		63678B102567D9B700523908 /* Stage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63678B0F2567D9B700523908 /* Stage.swift */; };
 		63F1F9132563D2B100798218 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63F1F9122563D2B100798218 /* AppDelegate.swift */; };
 		63F1F9152563D2B100798218 /* GameScene.sks in Resources */ = {isa = PBXBuildFile; fileRef = 63F1F9142563D2B100798218 /* GameScene.sks */; };
 		63F1F9192563D2B100798218 /* GameScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63F1F9182563D2B100798218 /* GameScene.swift */; };
@@ -52,7 +52,7 @@
 
 /* Begin PBXFileReference section */
 		63678B0D2567D1F900523908 /* bg200points.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = bg200points.png; sourceTree = "<group>"; };
-		63678B0F2567D9B700523908 /* Level.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Level.swift; sourceTree = "<group>"; };
+		63678B0F2567D9B700523908 /* Stage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Stage.swift; sourceTree = "<group>"; };
 		63F1F90F2563D2B100798218 /* Oh, boy!.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Oh, boy!.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		63F1F9122563D2B100798218 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		63F1F9142563D2B100798218 /* GameScene.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = GameScene.sks; sourceTree = "<group>"; };
@@ -186,7 +186,7 @@
 				63F1F95E25666B3700798218 /* Timers.swift */,
 				63F1F96025666BDD00798218 /* Background.swift */,
 				63F1F96225666D1000798218 /* Enemies.swift */,
-				63678B0F2567D9B700523908 /* Level.swift */,
+				63678B0F2567D9B700523908 /* Stage.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -360,7 +360,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				63678B102567D9B700523908 /* Level.swift in Sources */,
+				63678B102567D9B700523908 /* Stage.swift in Sources */,
 				63F1F92D2563E96F00798218 /* GameScene_physics.swift in Sources */,
 				63F1F95D25666ACD00798218 /* ReloadGame.swift in Sources */,
 				63F1F9192563D2B100798218 /* GameScene.swift in Sources */,

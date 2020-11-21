@@ -79,7 +79,7 @@ extension GameScene {
          }
     
         if contact.bodyA.categoryBitMask == shieldGroup || contact.bodyB.categoryBitMask == shieldGroup {
-            levelUp()
+            stageUp()
             let shieldNode = contact.bodyA.categoryBitMask == shieldGroup ? contact.bodyA.node : contact.bodyB.node
             if !shieldBool {
                 if Model.sharedInstance.sound { run(shieldOnPreload) }
@@ -113,7 +113,7 @@ extension GameScene {
          }
          
          if contact.bodyA.categoryBitMask == coinGroup || contact.bodyB.categoryBitMask == coinGroup {
-            levelUp()
+            stageUp()
              let coinNode = contact.bodyA.categoryBitMask == coinGroup ? contact.bodyA.node : contact.bodyB.node
              
              if Model.sharedInstance.sound {
@@ -153,7 +153,7 @@ extension GameScene {
          }
          
          if contact.bodyA.categoryBitMask == bigCoinGroup || contact.bodyB.categoryBitMask == bigCoinGroup {
-            levelUp()
+            stageUp()
             
             let bigCoinNode = contact.bodyA.categoryBitMask == bigCoinGroup ? contact.bodyA.node : contact.bodyB.node
              

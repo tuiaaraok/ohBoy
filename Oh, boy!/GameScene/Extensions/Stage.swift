@@ -11,7 +11,7 @@ import SpriteKit
 
 extension GameScene {
     
-    func levelUp() {
+    func stageUp() {
         
         if 1 <= Model.sharedInstance.score && Model.sharedInstance.score < 20 {
             stageLabel.text = "Stage 1"
