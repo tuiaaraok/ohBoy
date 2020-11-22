@@ -16,7 +16,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     var moveEnemyY = SKAction()
     var gameViewController: GameViewController!
     var animation = Animation()
-    var shieldBool = false
+    var shieldOn = false
+
     var gameOver = 0
     var level: Level!
     var background: Background!
@@ -40,6 +41,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     var ufoTexture: SKTexture!
     var shieldTexture: SKTexture!
     var shieldBottleTexture: SKTexture!
+    var blockTexture: SKTexture!
     
     
     // Emitters node
@@ -62,6 +64,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     var greenMonster = SKSpriteNode()
     var ufo = SKSpriteNode()
     var shieldBottle = SKSpriteNode()
+    var block = SKSpriteNode()
     
     // Label nodes
     var tapToPlayLabel = SKLabelNode()
@@ -107,10 +110,11 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     var timerAddBigCoin = Timer()
     var timerAddWorm = Timer()
     var timerAddSkull = Timer()
-    var timerAddShieldItem = Timer()
+    var timerAddShieldBottle = Timer()
     var timerAddSlimeMonster = Timer()
     var timerAddGreenMonster = Timer()
     var timerAddUfo = Timer()
+    var timerAddBlock = Timer()
     
     // Sounds
     var heroFlyPreload = SKAction()
@@ -153,13 +157,16 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         ufoTexture = SKTexture(imageNamed: "ufo.png")
         
         // Shield texture
-        shieldTexture = SKTexture(imageNamed: "engine.sks")
+        shieldTexture = SKTexture(imageNamed: "shield.sks")
         shieldBottleTexture = SKTexture(imageNamed: "shieldBottle.png")
         
         // Emitters
-        shieldEmitter = SKEmitterNode(fileNamed: "engine.sks")!
+        shieldEmitter = SKEmitterNode(fileNamed: "shield.sks")!
         leftShoeEmitter = SKEmitterNode(fileNamed: "shoeSpark.sks")!
         rightShoeEmitter = SKEmitterNode(fileNamed: "shoeSpark.sks")!
+        
+        // block texture
+        blockTexture = SKTexture(imageNamed: "block.png")
         
         self.physicsWorld.contactDelegate = self
         
@@ -187,7 +194,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         greenMonsterPreload = SKAction.playSoundFileNamed("greenMonster.mp3", waitForCompletion: false)
         ufoPreload = SKAction.playSoundFileNamed("ufo.mp3", waitForCompletion: false)
         shieldOnPreload = SKAction.playSoundFileNamed("shiled.mp3", waitForCompletion: false)
-        
     }
     
     func createObjects() {
@@ -261,7 +267,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         hero.physicsBody = SKPhysicsBody(rectangleOf: CGSize(width: hero.size.width - 40, height: hero.size.height - 30))
         
         hero.physicsBody?.categoryBitMask = heroGroup
-        hero.physicsBody?.contactTestBitMask = groundGroup | coinGroup | bigCoinGroup | objectGroup | shieldGroup 
+        hero.physicsBody?.contactTestBitMask = groundGroup | coinGroup | bigCoinGroup | objectGroup | shieldGroup
         hero.physicsBody?.collisionBitMask = groundGroup
         
         hero.physicsBody?.isDynamic = true
@@ -286,7 +292,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     
     @objc func addCoin() {
         
-        coin = SKSpriteNode(texture: shieldTexture)
+        coin = SKSpriteNode(texture: coinTexture)
                
         let coinAnimation = SKAction.animate(with: coinTexturesArray, timePerFrame: 0.1)
         let coinRepeat = SKAction.repeatForever(coinAnimation)
@@ -300,6 +306,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         coin.size.width = 40
         coin.size.height = 40
         coin.physicsBody = SKPhysicsBody(rectangleOf: CGSize(width: coin.size.width - 20, height: coin.size.height - 20))
+        
         coin.physicsBody?.restitution = 0
         coin.position = CGPoint(x: self.size.width + 50, y: 0 + coinTexture.size().height + 150 + pipeOffset)
                
@@ -344,9 +351,58 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         bigCoinObject.addChild(bigCoin)
     }
     
+     @objc func addBlock() {
+        block = SKSpriteNode(texture: blockTexture)
+              
+        block.size.width = 400
+        block.size.height = 50
+        block.speed  = 1
+  
+        let sizeRandom = arc4random() % 9
+        if sizeRandom == 0 {
+            block.size.width = 400
+        } else if sizeRandom == 1 {
+            block.size.width = 100
+        } else if sizeRandom == 2 {
+            block.size.width = 600
+        } else if sizeRandom == 3 {
+            block.size.width = 800
+        } else if sizeRandom == 4 {
+            block.size.width = 200
+        } else if sizeRandom == 5 {
+            block.size.width = 700
+        } else {
+            block.size.width = 500
+        }
+            
+        let positionRandom = arc4random() % 3
+        if positionRandom == 0 {
+            block.position = CGPoint(x: self.frame.size.width + 150, y: self.frame.size.height / 2)
+        } else if positionRandom == 1 {
+            block.position = CGPoint(x: self.frame.size.width + 150, y: self.frame.size.height / 2 + 100)
+        } else if positionRandom == 2 {
+            block.position = CGPoint(x: self.frame.size.width + 150, y: self.frame.size.height / 5 + 150)
+        }
+        
+                      
+        let moveBlockX = SKAction.moveTo(x: -self.frame.size.width / 10, duration: 4)
+        block.physicsBody = SKPhysicsBody(rectangleOf: CGSize(width: block.size.width - 40, height: block.size.height + 10))
+        block.physicsBody?.categoryBitMask = groundGroup
+        block.physicsBody?.isDynamic = false
+                      
+        let removeAction = SKAction.removeFromParent()
+        let blockMoveBgForever = SKAction.repeatForever(SKAction.sequence([moveBlockX, removeAction]))
+                      
+        block.run(blockMoveBgForever)
+        block.zPosition = 0
+        groundObject.addChild(block)
+    }
+    
     func addShield() {
         if Model.sharedInstance.sound { run(shieldOnPreload) }
-        createShieldEmitter()
+         shieldEmitter = SKEmitterNode(fileNamed: "shield.sks")!
+         shieldObject.zPosition = 0
+         shieldObject.addChild(shieldEmitter)
     }
     
     @objc func addShieldBottle() {
@@ -370,12 +426,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         shieldBottle.zPosition = 1
         shieldBottleObject.addChild(shieldBottle)
     }
-    
-    func createShieldEmitter() {
-        shieldEmitter = SKEmitterNode(fileNamed: "engine.sks")!
-        shieldObject.zPosition = 0
-        shieldObject.addChild(shieldEmitter)
-       }
     
     func deathAction() {
         mountainBgObject.isPaused = true

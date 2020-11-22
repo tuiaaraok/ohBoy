@@ -24,7 +24,7 @@ extension GameScene {
             death = true
             hero.physicsBody?.velocity = CGVector(dx: 0, dy: 0)
             
-            if !shieldBool {
+            if !shieldOn {
                 animation.shakeAndFlashAnimation(view: self.view!)
                 leftShoeEmitter.isHidden = true
                 rightShoeEmitter.isHidden = true
@@ -72,26 +72,28 @@ extension GameScene {
                 SKTAudio.sharedInstance().pauseBackgroundMusic()
             } else {
                 death = false
-                objectNode?.removeFromParent()
                 shieldObject.removeAllChildren()
-                shieldBool = false 
+                shieldOn = false
+                objectNode?.removeFromParent()
             }
          }
     
         if contact.bodyA.categoryBitMask == shieldGroup || contact.bodyB.categoryBitMask == shieldGroup {
             stageUp()
             let shieldNode = contact.bodyA.categoryBitMask == shieldGroup ? contact.bodyA.node : contact.bodyB.node
-            if !shieldBool {
+            if !shieldOn {
                 if Model.sharedInstance.sound { run(shieldOnPreload) }
                 shieldNode?.removeFromParent()
                 addShield()
-                shieldBool = true
+                shieldOn = true
             }
         }
          
          if contact.bodyA.categoryBitMask == groundGroup || contact.bodyB.categoryBitMask == groundGroup {
+        
              leftShoeEmitter.isHidden = true
              rightShoeEmitter.isHidden = true
+          
             if gameOver == 0 {
                 if death {
                     deathAction()
