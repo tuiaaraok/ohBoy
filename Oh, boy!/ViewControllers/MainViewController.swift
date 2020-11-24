@@ -26,7 +26,7 @@ class MainViewController: UIViewController {
     @IBAction func startGame(_ sender: UIButton) {
         SKTAudio.sharedInstance().playSoundEffect(filename: "")
         if let storyboard = storyboard {
-            let gameViewController = storyboard.instantiateViewController(identifier: "DifficultyViewController") as! LevelViewController
+            let gameViewController = storyboard.instantiateViewController(identifier: "LevelViewController") as! LevelViewController
             navigationController?.pushViewController(gameViewController, animated: true)
         }
     }

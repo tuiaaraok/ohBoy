@@ -59,6 +59,8 @@ class SelectBgViewController: UIViewController {
                 navigationController?.pushViewController(gameViewController, animated: true)
             } else if gameViewController.selectedBg.rawValue == 1 && Model.sharedInstance.totalscore > Model.sharedInstance.level2UnlockValue {
                 navigationController?.pushViewController(gameViewController, animated: true)
+            } else if gameViewController.selectedBg.rawValue == 2 && Model.sharedInstance.totalscore > Model.sharedInstance.level3UnlockValue {
+                 navigationController?.pushViewController(gameViewController, animated: true)
             }
         }
     }

@@ -51,38 +51,18 @@ extension GameScene {
                                     y: self.frame.size.height / 4 - 30)
         }
                        
-        let moveSpiderX = SKAction.moveTo(x: -self.frame.size.width / 4, duration: 4)
+        let moveWormX = SKAction.moveTo(x: -self.frame.size.width / 4, duration: 4)
         worm.physicsBody = SKPhysicsBody(rectangleOf: CGSize(width: worm.size.width - 40,
                                                              height: worm.size.height - 30))
         worm.physicsBody?.categoryBitMask = objectGroup
         worm.physicsBody?.isDynamic = false
                        
         let removeAction = SKAction.removeFromParent()
-        let wormMoveBgForever = SKAction.repeatForever(SKAction.sequence([moveSpiderX, removeAction]))
+        let wormMoveBgForever = SKAction.repeatForever(SKAction.sequence([moveWormX, removeAction]))
                        
         worm.run(wormMoveBgForever)
         worm.zPosition = 1
         enemyObject.addChild(worm)
-    }
-       
-    func createMoveEnemyY(i: UInt32) -> SKAction {
-        let movementRandom = arc4random() % i
-        if movementRandom == 0 {
-            moveEnemyY = SKAction.moveTo(y: self.frame.height / 2 + 180, duration: 8)
-        } else if movementRandom == 1 {
-            moveEnemyY = SKAction.moveTo(y: self.frame.height / 2 - 180, duration: 5)
-        } else if movementRandom == 2 {
-            moveEnemyY = SKAction.moveTo(y: self.frame.height / 2 - 200, duration: 8)
-        } else if movementRandom == 3 {
-            moveEnemyY = SKAction.moveTo(y: self.frame.height / 2 + 200, duration: 5)
-        } else if movementRandom == 4 {
-            moveEnemyY = SKAction.moveTo(y: self.frame.height / 2 + 40, duration: 4)
-        } else if movementRandom == 5 {
-            moveEnemyY = SKAction.moveTo(y: self.frame.height / 2 - 35, duration: 5)
-        } else {
-            moveEnemyY = SKAction.moveTo(y: self.frame.height / 2, duration: 4)
-        }
-        return moveEnemyY
     }
        
     @objc func addSkull() {
@@ -205,9 +185,9 @@ extension GameScene {
         greenMonster.physicsBody?.isDynamic = false
                   
         let removeAction = SKAction.removeFromParent()
-        let spiderMoveBgForever = SKAction.repeatForever(SKAction.sequence([moveGreenMonsterX, removeAction]))
+        let greenMonsterMoveBgForever = SKAction.repeatForever(SKAction.sequence([moveGreenMonsterX, removeAction]))
                   
-        greenMonster.run(spiderMoveBgForever)
+        greenMonster.run(greenMonsterMoveBgForever)
         greenMonster.zPosition = 1
         enemyObject.addChild(greenMonster)
     }
@@ -240,4 +220,24 @@ extension GameScene {
         ufo.zPosition = 1
         enemyObject.addChild(ufo)
     }
+    
+    func createMoveEnemyY(i: UInt32) -> SKAction {
+           let movementRandom = arc4random() % i
+           if movementRandom == 0 {
+               moveEnemyY = SKAction.moveTo(y: self.frame.height / 2 + 180, duration: 8)
+           } else if movementRandom == 1 {
+               moveEnemyY = SKAction.moveTo(y: self.frame.height / 2 - 180, duration: 5)
+           } else if movementRandom == 2 {
+               moveEnemyY = SKAction.moveTo(y: self.frame.height / 2 - 200, duration: 8)
+           } else if movementRandom == 3 {
+               moveEnemyY = SKAction.moveTo(y: self.frame.height / 2 + 200, duration: 5)
+           } else if movementRandom == 4 {
+               moveEnemyY = SKAction.moveTo(y: self.frame.height / 2 + 40, duration: 4)
+           } else if movementRandom == 5 {
+               moveEnemyY = SKAction.moveTo(y: self.frame.height / 2 - 35, duration: 5)
+           } else {
+               moveEnemyY = SKAction.moveTo(y: self.frame.height / 2, duration: 4)
+           }
+           return moveEnemyY
+       }
 }

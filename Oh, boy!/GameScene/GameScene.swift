@@ -433,7 +433,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         hero.texture = SKTexture(imageNamed: "fail.png")
         scene?.speed = 0
         hero.speed = 0
-        worm.removeAllChildren()
         hero.removeAllChildren()
     }
     
