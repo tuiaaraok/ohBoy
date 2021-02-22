@@ -199,7 +199,7 @@ extension GameScene {
                      
         ufo = SKSpriteNode(texture: ufoTexture)
         ufo.run(createMoveEnemyY(i: 9))
-              
+//        ufo.run(<#T##action: SKAction##SKAction#>)
         ufo.size.width = 70
         ufo.size.height = 50
         ufo.speed  = 2.8
